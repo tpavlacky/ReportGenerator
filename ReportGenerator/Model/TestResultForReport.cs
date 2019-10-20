@@ -1,19 +1,20 @@
 ﻿using System;
-using ProtocolGenerator.Extenders;
+using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.Extenders;
 
-namespace ProtocolGenerator
+namespace ReportGenerator
 {
 	public class TestResultForReport
 	{
-		public string Title { get; }
-		public string Summary { get; }
+		public int Id { get; }
+		public string Description { get; }
 		public int TestCaseId { get; }
-
+		public string Summary { get; }
+		public string Title { get; }
 		public TestOutcome Outcome { get; }
 		public int TestResultId { get; }
 		public int TestRunId { get; }
 		public string Tester { get; }
-
 		public string Configuration { get; }
 		public string RunBy { get; }
 		public DateTime DateCompleted { get; }

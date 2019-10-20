@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ProtocolGenerator.Extenders
+namespace ReportGenerator.Extenders
 {
   public static class CollectionExtenders
   {

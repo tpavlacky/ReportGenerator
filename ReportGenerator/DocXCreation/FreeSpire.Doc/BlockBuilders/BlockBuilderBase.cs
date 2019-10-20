@@ -2,7 +2,7 @@
 using Spire.Doc;
 using Spire.Doc.Documents;
 
-namespace ProtocolGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation
 {
   internal abstract class BlockBuilderBase
   {

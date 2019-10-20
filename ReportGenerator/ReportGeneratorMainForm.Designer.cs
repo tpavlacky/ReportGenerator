@@ -16,10 +16,14 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			DevExpress.XtraGrid.GridFormatRule gridFormatRule3 = new DevExpress.XtraGrid.GridFormatRule();
-			DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression3 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
-			DevExpress.XtraGrid.GridFormatRule gridFormatRule4 = new DevExpress.XtraGrid.GridFormatRule();
-			DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression4 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
+			DevExpress.XtraGrid.GridFormatRule gridFormatRule1 = new DevExpress.XtraGrid.GridFormatRule();
+			DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression1 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
+			DevExpress.XtraGrid.GridFormatRule gridFormatRule2 = new DevExpress.XtraGrid.GridFormatRule();
+			DevExpress.XtraEditors.FormatConditionRuleExpression formatConditionRuleExpression2 = new DevExpress.XtraEditors.FormatConditionRuleExpression();
+			DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
+			DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
+			DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
+			DevExpress.Utils.ToolTipItem toolTipItem2 = new DevExpress.Utils.ToolTipItem();
 			this.colOutcome = new DevExpress.XtraGrid.Columns.GridColumn();
 			this.gridControl = new DevExpress.XtraGrid.GridControl();
 			this.testResultForReportBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -41,17 +45,35 @@
 			this.beTestSuiteId = new DevExpress.XtraBars.BarEditItem();
 			this.repItemTestSuiteID = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
 			this.barSuiteName = new DevExpress.XtraBars.BarStaticItem();
+			this.beTemplates = new DevExpress.XtraBars.BarEditItem();
+			this.templatesLookUpEdit = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+			this.templateInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
+			this.beTemplatesFolder = new DevExpress.XtraBars.BarEditItem();
+			this.templatesFolderRepositoryItem = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
 			this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
 			this.pageGroupTCLoad = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
 			this.pageGroupExport = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+			this.ribbonTemplate = new DevExpress.XtraBars.Ribbon.RibbonPage();
+			this.templatesRibbonPageGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+			this.repositoryItemButtonEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
+			this.cbTemplates = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+			this.repositoryItemComboBox1 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+			this.repositoryItemComboBox2 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+			this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
 			this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-			this.testSuiteForReportBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.gridControl)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.testResultForReportBindingSource)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gridView)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.repItemTestSuiteID)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.testSuiteForReportBindingSource)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.templatesLookUpEdit)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.templateInfoBindingSource)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.templatesFolderRepositoryItem)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.cbTemplates)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// colOutcome
@@ -78,7 +100,7 @@
 			// 
 			// testResultForReportBindingSource
 			// 
-			this.testResultForReportBindingSource.DataSource = typeof(ProtocolGenerator.TestResultForReport);
+			this.testResultForReportBindingSource.DataSource = typeof(ReportGenerator.TestResultForReport);
 			// 
 			// gridView
 			// 
@@ -95,27 +117,27 @@
             this.colRunBy,
             this.colDateCompleted,
             this.colDurationInSeconds});
-			gridFormatRule3.Column = this.colOutcome;
-			gridFormatRule3.Name = "OutcomePassed";
-			formatConditionRuleExpression3.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-			formatConditionRuleExpression3.Appearance.Options.UseForeColor = true;
-			formatConditionRuleExpression3.Expression = "[Outcome] = 1";
-			formatConditionRuleExpression3.PredefinedName = "Bold Text";
-			gridFormatRule3.Rule = formatConditionRuleExpression3;
-			gridFormatRule4.Column = this.colOutcome;
-			gridFormatRule4.Name = "OutcomeFailed";
-			formatConditionRuleExpression4.Expression = "[Outcome] = 0";
-			formatConditionRuleExpression4.PredefinedName = "Red Bold Text";
-			gridFormatRule4.Rule = formatConditionRuleExpression4;
-			this.gridView.FormatRules.Add(gridFormatRule3);
-			this.gridView.FormatRules.Add(gridFormatRule4);
+			gridFormatRule1.Column = this.colOutcome;
+			gridFormatRule1.Name = "OutcomePassed";
+			formatConditionRuleExpression1.Appearance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+			formatConditionRuleExpression1.Appearance.Options.UseForeColor = true;
+			formatConditionRuleExpression1.Expression = "[Outcome] = 2";
+			formatConditionRuleExpression1.PredefinedName = "Bold Text";
+			gridFormatRule1.Rule = formatConditionRuleExpression1;
+			gridFormatRule2.Column = this.colOutcome;
+			gridFormatRule2.Name = "OutcomeFailed";
+			formatConditionRuleExpression2.Expression = "[Outcome] = 3";
+			formatConditionRuleExpression2.PredefinedName = "Red Bold Text";
+			gridFormatRule2.Rule = formatConditionRuleExpression2;
+			this.gridView.FormatRules.Add(gridFormatRule1);
+			this.gridView.FormatRules.Add(gridFormatRule2);
 			this.gridView.GridControl = this.gridControl;
 			this.gridView.Name = "gridView";
 			this.gridView.OptionsBehavior.Editable = false;
 			this.gridView.OptionsBehavior.ReadOnly = true;
 			this.gridView.OptionsSelection.EnableAppearanceFocusedCell = false;
 			this.gridView.OptionsSelection.EnableAppearanceFocusedRow = false;
-			this.gridView.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.gridView_RowCellStyle);
+			this.gridView.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridView_RowCellStyle);
 			// 
 			// colTitle
 			// 
@@ -206,14 +228,24 @@
             this.bsiRecordsCount,
             this.bbiRefresh,
             this.beTestSuiteId,
-            this.barSuiteName});
+            this.barSuiteName,
+            this.beTemplates,
+            this.beTemplatesFolder});
 			this.ribbonControl.Location = new System.Drawing.Point(0, 0);
-			this.ribbonControl.MaxItemId = 22;
+			this.ribbonControl.MaxItemId = 32;
 			this.ribbonControl.Name = "ribbonControl";
 			this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
-            this.ribbonPage1});
+            this.ribbonPage1,
+            this.ribbonTemplate});
 			this.ribbonControl.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.repItemTestSuiteID});
+            this.repItemTestSuiteID,
+            this.repositoryItemButtonEdit1,
+            this.cbTemplates,
+            this.templatesFolderRepositoryItem,
+            this.templatesLookUpEdit,
+            this.repositoryItemComboBox1,
+            this.repositoryItemComboBox2,
+            this.repositoryItemCheckEdit1});
 			this.ribbonControl.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonControlStyle.Office2013;
 			this.ribbonControl.ShowApplicationButton = DevExpress.Utils.DefaultBoolean.False;
 			this.ribbonControl.Size = new System.Drawing.Size(790, 143);
@@ -227,7 +259,7 @@
 			this.bbiGenerateReport.Id = 14;
 			this.bbiGenerateReport.ImageOptions.ImageUri.Uri = "Preview";
 			this.bbiGenerateReport.Name = "bbiGenerateReport";
-			this.bbiGenerateReport.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiGenerateReport_ItemClick);
+			this.bbiGenerateReport.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.GenerateReport_ItemClick);
 			// 
 			// bsiRecordsCount
 			// 
@@ -242,13 +274,13 @@
 			this.bbiRefresh.Id = 19;
 			this.bbiRefresh.ImageOptions.ImageUri.Uri = "Refresh";
 			this.bbiRefresh.Name = "bbiRefresh";
-			this.bbiRefresh.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiRefresh_ItemClick);
+			this.bbiRefresh.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.RefreshDataSource_ItemClick);
 			// 
 			// beTestSuiteId
 			// 
 			this.beTestSuiteId.Caption = "Test suite ID:";
 			this.beTestSuiteId.Edit = this.repItemTestSuiteID;
-			this.beTestSuiteId.EditWidth = 60;
+			this.beTestSuiteId.EditWidth = 80;
 			this.beTestSuiteId.Id = 20;
 			this.beTestSuiteId.Name = "beTestSuiteId";
 			// 
@@ -259,12 +291,68 @@
 			this.repItemTestSuiteID.Mask.EditMask = "\\d+";
 			this.repItemTestSuiteID.Mask.MaskType = DevExpress.XtraEditors.Mask.MaskType.RegEx;
 			this.repItemTestSuiteID.Name = "repItemTestSuiteID";
-			this.repItemTestSuiteID.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.repItemTestSuiteID_EditValueChanging);
+			this.repItemTestSuiteID.EditValueChanging += new DevExpress.XtraEditors.Controls.ChangingEventHandler(this.RepItemTestSuiteID_EditValueChanging);
 			// 
 			// barSuiteName
 			// 
 			this.barSuiteName.Id = 21;
 			this.barSuiteName.Name = "barSuiteName";
+			// 
+			// beTemplates
+			// 
+			this.beTemplates.AutoFillWidthInMenu = DevExpress.Utils.DefaultBoolean.True;
+			this.beTemplates.Caption = "Template:";
+			this.beTemplates.Edit = this.templatesLookUpEdit;
+			this.beTemplates.EditWidth = 200;
+			this.beTemplates.Id = 23;
+			this.beTemplates.Name = "beTemplates";
+			toolTipItem1.Text = "Template which will be used for generating final document. If none is selected, d" +
+    "efault template will be used.";
+			superToolTip1.Items.Add(toolTipItem1);
+			this.beTemplates.SuperTip = superToolTip1;
+			this.beTemplates.EditValueChanged += new System.EventHandler(this.BeTemplates_EditValueChanged);
+			// 
+			// templatesLookUpEdit
+			// 
+			this.templatesLookUpEdit.AutoHeight = false;
+			this.templatesLookUpEdit.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Close)});
+			this.templatesLookUpEdit.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Name", "Name", 50, DevExpress.Utils.FormatType.None, "", true, DevExpress.Utils.HorzAlignment.Near, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default),
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("FullName", "Full Name", 56, DevExpress.Utils.FormatType.None, "", false, DevExpress.Utils.HorzAlignment.Near, DevExpress.Data.ColumnSortOrder.None, DevExpress.Utils.DefaultBoolean.Default)});
+			this.templatesLookUpEdit.DataSource = this.templateInfoBindingSource;
+			this.templatesLookUpEdit.DisplayMember = "Name";
+			this.templatesLookUpEdit.Name = "templatesLookUpEdit";
+			this.templatesLookUpEdit.NullText = "";
+			this.templatesLookUpEdit.ValueMember = "FullName";
+			this.templatesLookUpEdit.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.templatesLookUpEdit_ButtonClick);
+			// 
+			// templateInfoBindingSource
+			// 
+			this.templateInfoBindingSource.DataSource = typeof(ReportGenerator.TemplateInfo);
+			// 
+			// beTemplatesFolder
+			// 
+			this.beTemplatesFolder.AutoFillWidthInMenu = DevExpress.Utils.DefaultBoolean.True;
+			this.beTemplatesFolder.Caption = "Folder:     ";
+			this.beTemplatesFolder.Edit = this.templatesFolderRepositoryItem;
+			this.beTemplatesFolder.EditWidth = 300;
+			this.beTemplatesFolder.Id = 24;
+			this.beTemplatesFolder.Name = "beTemplatesFolder";
+			toolTipItem2.Text = "Folder which contains *.docx templates to choose from";
+			superToolTip2.Items.Add(toolTipItem2);
+			this.beTemplatesFolder.SuperTip = superToolTip2;
+			// 
+			// templatesFolderRepositoryItem
+			// 
+			this.templatesFolderRepositoryItem.AutoHeight = false;
+			this.templatesFolderRepositoryItem.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+			this.templatesFolderRepositoryItem.Name = "templatesFolderRepositoryItem";
+			this.templatesFolderRepositoryItem.ReadOnly = true;
+			this.templatesFolderRepositoryItem.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+			this.templatesFolderRepositoryItem.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.TemplatesFolderRepositoryItem_ButtonClick);
 			// 
 			// ribbonPage1
 			// 
@@ -292,6 +380,54 @@
 			this.pageGroupExport.ShowCaptionButton = false;
 			this.pageGroupExport.Text = "Export";
 			// 
+			// ribbonTemplate
+			// 
+			this.ribbonTemplate.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.templatesRibbonPageGroup});
+			this.ribbonTemplate.Name = "ribbonTemplate";
+			this.ribbonTemplate.Text = "Templates";
+			// 
+			// templatesRibbonPageGroup
+			// 
+			this.templatesRibbonPageGroup.ItemLinks.Add(this.beTemplatesFolder);
+			this.templatesRibbonPageGroup.ItemLinks.Add(this.beTemplates);
+			this.templatesRibbonPageGroup.Name = "templatesRibbonPageGroup";
+			this.templatesRibbonPageGroup.Text = "Custom template";
+			// 
+			// repositoryItemButtonEdit1
+			// 
+			this.repositoryItemButtonEdit1.AutoHeight = false;
+			this.repositoryItemButtonEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+			this.repositoryItemButtonEdit1.Name = "repositoryItemButtonEdit1";
+			// 
+			// cbTemplates
+			// 
+			this.cbTemplates.AutoHeight = false;
+			this.cbTemplates.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+			this.cbTemplates.Name = "cbTemplates";
+			this.cbTemplates.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+			// 
+			// repositoryItemComboBox1
+			// 
+			this.repositoryItemComboBox1.AutoHeight = false;
+			this.repositoryItemComboBox1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+			this.repositoryItemComboBox1.Name = "repositoryItemComboBox1";
+			// 
+			// repositoryItemComboBox2
+			// 
+			this.repositoryItemComboBox2.AutoHeight = false;
+			this.repositoryItemComboBox2.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+			this.repositoryItemComboBox2.Name = "repositoryItemComboBox2";
+			// 
+			// repositoryItemCheckEdit1
+			// 
+			this.repositoryItemCheckEdit1.AutoHeight = false;
+			this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
+			// 
 			// ribbonStatusBar
 			// 
 			this.ribbonStatusBar.ItemLinks.Add(this.bsiRecordsCount);
@@ -300,10 +436,6 @@
 			this.ribbonStatusBar.Name = "ribbonStatusBar";
 			this.ribbonStatusBar.Ribbon = this.ribbonControl;
 			this.ribbonStatusBar.Size = new System.Drawing.Size(790, 31);
-			// 
-			// testSuiteForReportBindingSource
-			// 
-			this.testSuiteForReportBindingSource.DataSource = typeof(ProtocolGenerator.TestSuiteForReport);
 			// 
 			// ReportGeneratorMainForm
 			// 
@@ -321,7 +453,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.gridView)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.repItemTestSuiteID)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.testSuiteForReportBindingSource)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.templatesLookUpEdit)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.templateInfoBindingSource)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.templatesFolderRepositoryItem)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.cbTemplates)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -350,9 +489,20 @@
         private DevExpress.XtraGrid.Columns.GridColumn colRunBy;
         private DevExpress.XtraGrid.Columns.GridColumn colDateCompleted;
         private DevExpress.XtraGrid.Columns.GridColumn colDurationInSeconds;
-        private System.Windows.Forms.BindingSource testSuiteForReportBindingSource;
         private DevExpress.XtraBars.BarEditItem beTestSuiteId;
         private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repItemTestSuiteID;
         private DevExpress.XtraBars.BarStaticItem barSuiteName;
-    }
+		private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEdit1;
+		private DevExpress.XtraBars.Ribbon.RibbonPage ribbonTemplate;
+		private DevExpress.XtraBars.Ribbon.RibbonPageGroup templatesRibbonPageGroup;
+		private DevExpress.XtraBars.BarEditItem beTemplates;
+		private DevExpress.XtraEditors.Repository.RepositoryItemComboBox cbTemplates;
+		private DevExpress.XtraBars.BarEditItem beTemplatesFolder;
+		private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit templatesFolderRepositoryItem;
+		private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit templatesLookUpEdit;
+		private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox1;
+		private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBox2;
+		private System.Windows.Forms.BindingSource templateInfoBindingSource;
+		private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
+	}
 }

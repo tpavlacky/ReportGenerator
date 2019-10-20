@@ -1,5 +1,5 @@
-﻿using ProtocolGenerator;
-using ProtocolGenerator.DocXCreation;
+﻿using ReportGenerator;
+using ReportGenerator.DocXCreation;
 
 namespace ReportGenerator
 {

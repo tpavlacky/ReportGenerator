@@ -1,7 +1,7 @@
 ﻿using System;
 using Spire.Doc.Documents;
 
-namespace ProtocolGenerator.Extenders
+namespace ReportGenerator.Extenders
 {
   public static class ParagraphExtenders
   {

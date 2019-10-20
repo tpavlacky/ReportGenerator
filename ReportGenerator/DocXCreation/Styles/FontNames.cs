@@ -1,4 +1,4 @@
-﻿namespace ProtocolGenerator.DocXCreation
+﻿namespace ReportGenerator.DocXCreation
 {
 	internal static class FontNames
 	{

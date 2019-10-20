@@ -1,6 +1,6 @@
 ﻿using System;
 using DevExpress.XtraBars;
-using ProtocolGenerator;
+using ReportGenerator;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraBars.Ribbon;
 using System.Windows.Forms;
@@ -9,6 +9,11 @@ using System.Diagnostics;
 using DevExpress.XtraSplashScreen;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using DevExpress.XtraEditors;
+using DevExpress.Utils.CommonDialogs;
+using ReportGenerator.DataProviders.TFSTestSuiteDataProvider;
 
 namespace ReportGenerator
 {
@@ -16,6 +21,7 @@ namespace ReportGenerator
 	{
 		private readonly IDocXBuilderFactory _docXBuilderFactory = new DocXBuilderFactory();
 		private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new DummyTestSuiteForReportProvider();
+		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new TFSPlanTestSuiteProvider();
 		private readonly IMessageBoxProvider _messageBoxProvider = new FlyoutMessageBoxProvider();
 		private readonly CancelableProgressOverlayFormManager _overlayFormManager = new CancelableProgressOverlayFormManager();
 
@@ -27,9 +33,37 @@ namespace ReportGenerator
 		public ReportGeneratorMainForm()
 		{
 			InitializeComponent();
+			InitAppSettings();
 		}
 
-		private async void bbiRefresh_ItemClick(object sender, ItemClickEventArgs e)
+		private void InitAppSettings()
+		{
+			InitTemplates();
+		}
+
+		private void InitTemplates()
+		{
+			var templatesPath = Properties.Settings.Default.TemplatesPath;
+			if (string.IsNullOrEmpty(templatesPath) || !Directory.Exists(templatesPath))
+			{
+				return;
+			}
+
+			beTemplatesFolder.EditValue = templatesPath;
+
+			UpdateAvailableTemplates(templatesPath);
+
+			var lastUsedTemplateName = Properties.Settings.Default.SelectedTemplate;
+			var dsTemplateInfo = GetDataSourceTemplateByName(lastUsedTemplateName);
+			if (string.IsNullOrEmpty(lastUsedTemplateName) || dsTemplateInfo == null)
+			{
+				return;
+			}
+
+			beTemplates.EditValue = dsTemplateInfo.FullName;
+		}
+
+		private async void RefreshDataSource_ItemClick(object sender, ItemClickEventArgs e)
 		{
 			IOverlaySplashScreenHandle overlayHandle = null;
 
@@ -80,7 +114,7 @@ namespace ReportGenerator
 			}
 		}
 
-		private async void bbiGenerateReport_ItemClick(object sender, ItemClickEventArgs e)
+		private async void GenerateReport_ItemClick(object sender, ItemClickEventArgs e)
 		{
 			FileInfo document = null;
 			IOverlaySplashScreenHandle overlayHandle = null;
@@ -90,12 +124,17 @@ namespace ReportGenerator
 
 			try
 			{
+				var template = GetTemplateFileInfo();
+				if(template == null)
+				{
+					_messageBoxProvider.ShowInformation(this, "Template was not defined by user. Default template will be used.", "Custom template not defined");
+				}
 				overlayHandle = _overlayFormManager.ShowOverlayForm(this, OnCancelButtonClick);
 				SetOverlayLabel("Loading data ...");
 				var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.FreeSpire, GetDataSourceForReport(cancellationToken, new Progress<string>(SetOverlayLabel))));
 
 				SetOverlayLabel("Generating report ...");
-				document = await Task.Run(() => builder.CreateDocument(cancellationToken, new Progress<string>(SetOverlayLabel)));
+				document = await Task.Run(() => builder.CreateDocument(template, cancellationToken, new Progress<string>(SetOverlayLabel)));
 			}
 			catch (OperationCanceledException)
 			{
@@ -137,7 +176,22 @@ namespace ReportGenerator
 			}
 		}
 
-		private void gridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
+		private FileInfo GetTemplateFileInfo()
+		{
+			if(!(beTemplates.EditValue is string templateFullName))
+			{
+				return null;
+			}
+
+			if (!File.Exists(templateFullName))
+			{
+				return null;
+			}
+
+			return new FileInfo(templateFullName);
+		}
+
+		private void GridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
 		{
 			GridView view = sender as GridView;
 			if (view.FocusedRowHandle == e.RowHandle)
@@ -181,7 +235,7 @@ namespace ReportGenerator
 				return null;
 			}
 
-			return _testSuiteForReportProvider.GetData(cancellationToken, progress);
+			return _testSuiteForReportProvider.GetData(testSuiteID, cancellationToken, progress);
 		}
 
 		private TestSuiteForReport GetDataSourceForReport(CancellationToken cancellationToken, IProgress<string> progress)
@@ -189,10 +243,85 @@ namespace ReportGenerator
 			return _testSuiteForReport ?? GetNewDataSource(cancellationToken, progress);
 		}
 
-		private void repItemTestSuiteID_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
+		private void RepItemTestSuiteID_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
 		{
-			bbiRefresh.Enabled =
-					bbiGenerateReport.Enabled = ConvertToUint(e.NewValue) != 0;
+			bbiRefresh.Enabled = bbiGenerateReport.Enabled = ConvertToUint(e.NewValue) != 0;
+		}
+
+		private void UpdateAvailableTemplates(string templatesFolderPath)
+		{
+			var templates = GetTemplatesFromPath(templatesFolderPath);
+			templatesLookUpEdit.DataSource = templates;
+		}
+
+		private IEnumerable<TemplateInfo> GetTemplatesFromPath(string templatesFolderPath)
+		{
+			if (string.IsNullOrEmpty(templatesFolderPath) || !Directory.Exists(templatesFolderPath))
+			{
+				return Enumerable.Empty<TemplateInfo>();
+			}
+
+			return Directory.GetFiles(templatesFolderPath, "*.docx")
+				.Select(fullName =>
+				{
+					var fi = new FileInfo(fullName);
+					return new TemplateInfo(fi.Name, fi.FullName);
+				})
+				.OrderBy(ti => ti.Name);
+		}
+
+		private void TemplatesFolderRepositoryItem_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+		{
+			using (var xtraFolderBrowserDialog = new XtraFolderBrowserDialog())
+			{
+				xtraFolderBrowserDialog.DialogStyle = FolderBrowserDialogStyle.Wide;
+				var result = xtraFolderBrowserDialog.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					var selectedFolder = xtraFolderBrowserDialog.SelectedPath;
+					beTemplatesFolder.EditValue = selectedFolder;
+
+					UpdateAvailableTemplates(selectedFolder);
+					beTemplates.EditValue = string.Empty;
+
+					Properties.Settings.Default.TemplatesPath = selectedFolder;
+					Properties.Settings.Default.Save();
+				}
+			}
+		}
+
+		private void BeTemplates_EditValueChanged(object sender, EventArgs e)
+		{
+			SaveSelectedTemplate();
+		}
+
+		private void SaveSelectedTemplate()
+		{
+			if (!(beTemplates.EditValue is string fullTemplatePath))
+			{
+				return;
+			}
+
+			Properties.Settings.Default.SelectedTemplate = fullTemplatePath;
+			Properties.Settings.Default.Save();
+		}
+
+		private TemplateInfo GetDataSourceTemplateByName(string templateName)
+		{
+			if (!(templatesLookUpEdit.DataSource is IEnumerable<TemplateInfo> dataSource))
+			{
+				return null;
+			}
+
+			return dataSource.FirstOrDefault(item => item.FullName.Equals(templateName));
+		}
+
+		private void templatesLookUpEdit_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
+		{
+			if(e.Button.Index == 1)
+			{
+				beTemplates.EditValue = string.Empty;
+			}
 		}
 
 		protected override void Dispose(bool disposing)
@@ -206,6 +335,19 @@ namespace ReportGenerator
 
 			}
 			base.Dispose(disposing);
+		}
+	}
+
+	public class TemplateInfo
+	{
+		public string Name { get; }
+
+		public string FullName { get; }
+
+		public TemplateInfo(string name, string fullName)
+		{
+			Name = name;
+			FullName = fullName;
 		}
 	}
 }

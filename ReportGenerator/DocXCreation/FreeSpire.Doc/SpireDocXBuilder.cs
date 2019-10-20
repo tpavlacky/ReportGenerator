@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using ProtocolGenerator.Extenders;
+using ReportGenerator.Extenders;
 using Spire.Doc;
 using System.Threading;
 
-namespace ProtocolGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation
 {
 	internal class SpireDocXBuilder : IDocXBuilder
 	{
@@ -18,22 +18,23 @@ namespace ProtocolGenerator.DocXCreation
 			_testSuiteForReport = testSuiteForReport;
 		}
 
-		public FileInfo CreateDocument(CancellationToken cancellationToken, IProgress<string> progress)
+		public FileInfo CreateDocument(FileInfo docTemplate, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			if (_testSuiteForReport == null)
 			{
 				throw new ArgumentNullException(nameof(_testSuiteForReport));
 			}
 
-			var templatePath = GetDocxTemplatePath();
-			File.Copy(templatePath, _finalDocumentPath, true);
+			var templateFullPath = GetDocTemplate(docTemplate).FullName;
+
+			File.Copy(templateFullPath, _finalDocumentPath, true);
 
 			//free spiro is limited to 25 tables per section => after every 25 test cases needs to be new section
 			var testResultsChunks = _testSuiteForReport.TestResults.Chunk(CHUNK_SIZE);
 
 			ProgressReport(progress, "Creating DocX file");
 			var doc = new Document(_finalDocumentPath);
-			var section = doc.AddSection();
+			var section = doc.LastSection ?? doc.AddSection();
 
 			ProgressReport(progress, "Generating test suite information");
 			var testSuiteHeaderBuilder = new TestSuiteBlockBuilder(section);
@@ -55,9 +56,17 @@ namespace ProtocolGenerator.DocXCreation
 
 			doc.SaveToFile(_finalDocumentPath);
 
-			ClearTempFiles(templatePath);
+			if (docTemplate == null)
+			{
+				ClearTempFiles(templateFullPath);
+			}
 
 			return new FileInfo(_finalDocumentPath);
+		}
+
+		private FileInfo GetDocTemplate(FileInfo providedTemplate)
+		{
+			return (providedTemplate == null || !File.Exists(providedTemplate.FullName)) ? GetDefaultDocxTemplateFileInfo() : providedTemplate;
 		}
 
 		private void ProgressReport(IProgress<string> progress, string message)
@@ -76,7 +85,7 @@ namespace ProtocolGenerator.DocXCreation
 			}
 		}
 
-		private string GetDocxTemplatePath()
+		private FileInfo GetDefaultDocxTemplateFileInfo()
 		{
 			var tempFileFullPath = Path.GetTempPath() + "Template_empty.docx";
 			try
@@ -91,7 +100,12 @@ namespace ProtocolGenerator.DocXCreation
 
 			UnpackTemplate(tempFileFullPath);
 
-			return tempFileFullPath;
+			if (!File.Exists(tempFileFullPath))
+			{
+				throw new FileNotFoundException("Default template was not found");
+			}
+
+			return new FileInfo(tempFileFullPath);
 		}
 
 		private static void UnpackTemplate(string tempFileFullPath)

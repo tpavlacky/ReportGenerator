@@ -1,4 +1,4 @@
-﻿namespace ProtocolGenerator
+﻿namespace ReportGenerator
 {
   internal static class StyleNames
   {

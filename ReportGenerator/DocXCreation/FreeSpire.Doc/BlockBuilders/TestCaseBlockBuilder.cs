@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ProtocolGenerator.Extenders;
+using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.Extenders;
 using Spire.Doc;
 using Spire.Doc.Documents;
 
-namespace ProtocolGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation
 {
   internal class TestCaseBlockBuilder : BlockBuilderBase
     {
@@ -145,13 +146,10 @@ namespace ProtocolGenerator.DocXCreation
       {
         case TestOutcome.Passed:
 					return StyleNames.PASSED_TC;
-          //return nameof(_testReportStyles.PassedTestCase);
         case TestOutcome.Failed:
 					return StyleNames.FAILED_TC;
-          //return nameof(_testReportStyles.FailedTestCase);
         default:
 					return StyleNames.DEFAULT;
-          //return nameof(_testReportStyles.Default);
       }
     }
 

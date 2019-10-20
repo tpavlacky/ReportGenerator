@@ -1,4 +1,4 @@
-﻿using ProtocolGenerator;
+﻿using Microsoft.TeamFoundation.TestManagement.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace ReportGenerator
 	{
 		private readonly Random _rand = new Random();
 
-		public TestSuiteForReport GetData(CancellationToken cancellationToken, IProgress<string> progress)
+		public TestSuiteForReport GetData(uint testSuiteId, CancellationToken cancellationToken, IProgress<string> progress)
 		{
-			return new TestSuiteForReport(666, 333, "DummyTestSuite", GetTestResults(cancellationToken, progress).ToList());
+			return new TestSuiteForReport(testSuiteId, 333, "DummyTestSuite", GetTestResults(cancellationToken, progress).ToList());
 		}
 
 		private IEnumerable<TestResultForReport> GetTestResults(CancellationToken cancellationToken, IProgress<string> progress)
@@ -45,7 +45,7 @@ namespace ReportGenerator
 				return TestOutcome.Passed;
 			}
 
-			return TestOutcome.Other;
+			return TestOutcome.None;
 		}
 	}
 }

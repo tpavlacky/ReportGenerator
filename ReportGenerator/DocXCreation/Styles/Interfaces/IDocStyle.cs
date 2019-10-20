@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ProtocolGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation
 {
 	public interface IDocStyle
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace ProtocolGenerator.Extenders
+namespace ReportGenerator.Extenders
 {
   public static class TextExtenders
   {

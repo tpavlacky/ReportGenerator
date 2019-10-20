@@ -2,10 +2,10 @@
 using System.IO;
 using System.Threading;
 
-namespace ProtocolGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation
 {
     internal interface IDocXBuilder
     {
-        FileInfo CreateDocument(CancellationToken cancellationToken, IProgress<string> progress);
+        FileInfo CreateDocument(FileInfo docTemplate, CancellationToken cancellationToken, IProgress<string> progress);
     }
 }

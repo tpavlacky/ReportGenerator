@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
-using ProtocolGenerator.Extenders;
+using ReportGenerator.Extenders;
 using Spire.Doc;
 using Spire.Doc.Documents;
 
-namespace ProtocolGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation
 {
   internal class TestSuiteBlockBuilder : BlockBuilderBase
   {
