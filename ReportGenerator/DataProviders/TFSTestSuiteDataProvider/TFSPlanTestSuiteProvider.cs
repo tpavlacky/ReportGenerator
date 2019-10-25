@@ -9,7 +9,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 {
 	public class TFSPlanTestSuiteProvider : ITestSuiteForReportProvider
 	{
-		public TestSuiteForReport GetData(uint testSuiteId, CancellationToken cancellationToken, IProgress<string> progress)
+		public TestSuiteForReport GetData(uint objectID, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			var results = new List<TestResultForReport>();
 			var tfsCollection = new TfsTeamProjectCollection(
@@ -19,7 +19,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 			var testManagementService = tfsCollection.GetService<ITestManagementService>();
 			var teamProject = testManagementService.GetTeamProject("TP DCMS2");
 
-			var testSuite = teamProject.TestSuites.Find((int)testSuiteId);
+			var testSuite = teamProject.TestSuites.Find((int)objectID);
 			var testSuiteName = testSuite.Title;
 			var testCases = testSuite.AllTestCases;
 			var testCasesCount = testCases.Count;
@@ -33,7 +33,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 				results.Add(new TestResultForReport(testCase.Id, testCase.Title, testCase.Description, testResult.Outcome, testResult.TestResultId, testResult.TestRunId, testCase.OwnerName, testResult.TestConfigurationName, testResult.RunByName, testResult.DateCompleted, testResult.Duration));
 			}
 
-			return new TestSuiteForReport(testSuiteId, testSuite.Plan.Id, testSuiteName, results);
+			return new TestSuiteForReport(objectID, testSuite.Plan.Id, testSuiteName, results);
 		}
 	}
 }

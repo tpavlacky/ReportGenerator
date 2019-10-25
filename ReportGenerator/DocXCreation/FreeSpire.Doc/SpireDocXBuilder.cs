@@ -110,7 +110,7 @@ namespace ReportGenerator.DocXCreation
 
 		private static void UnpackTemplate(string tempFileFullPath)
 		{
-			using (var ms = new MemoryStream(ReportGenerator.Properties.Resources.Template_empty))
+			using (var ms = new MemoryStream(Properties.Resources.Template_empty))
 			{
 				using (var fs = new FileStream(tempFileFullPath, FileMode.CreateNew))
 				{

@@ -26,24 +26,36 @@ namespace ReportGenerator.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TemplatesPath {
-            get {
-                return ((string)(this["TemplatesPath"]));
-            }
-            set {
-                this["TemplatesPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string SelectedTemplate {
             get {
                 return ((string)(this["SelectedTemplate"]));
             }
             set {
                 this["SelectedTemplate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TFSAddress {
+            get {
+                return ((string)(this["TFSAddress"]));
+            }
+            set {
+                this["TFSAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProjectName {
+            get {
+                return ((string)(this["ProjectName"]));
+            }
+            set {
+                this["ProjectName"] = value;
             }
         }
     }

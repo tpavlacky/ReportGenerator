@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ReportGenerator.Model;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ReportGenerator.Extenders
@@ -13,5 +14,18 @@ namespace ReportGenerator.Extenders
         source = source.Skip(chunksize);
       }
     }
-  }
+
+		public static IEnumerable<IReportItem> Flatten(this IReportItem reportItem)
+		{
+			var stack = new Stack<IReportItem>();
+			stack.Push(reportItem);
+			while (stack.Count > 0)
+			{
+				var current = stack.Pop();
+				yield return current;
+				foreach (var child in current.Children)
+					stack.Push(child);
+			}
+		}
+	}
 }

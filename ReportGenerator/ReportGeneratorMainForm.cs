@@ -1,7 +1,5 @@
 ﻿using System;
 using DevExpress.XtraBars;
-using ReportGenerator;
-using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraBars.Ribbon;
 using System.Windows.Forms;
 using System.IO;
@@ -9,23 +7,33 @@ using System.Diagnostics;
 using DevExpress.XtraSplashScreen;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
 using DevExpress.XtraEditors;
-using DevExpress.Utils.CommonDialogs;
-using ReportGenerator.DataProviders.TFSTestSuiteDataProvider;
+using ReportGenerator.DataProviders.Dummy.Hierarchy;
+using ReportGenerator.Model;
+using DevExpress.XtraTreeList;
+using System.Drawing;
+using DevExpress.XtraTreeList.Menu;
+using DevExpress.Utils.Menu;
+using Microsoft.TeamFoundation.Client;
+using Microsoft.VisualStudio.Services.Client;
+using Microsoft.VisualStudio.Services.Common;
 
 namespace ReportGenerator
 {
 	public partial class ReportGeneratorMainForm : RibbonForm
 	{
 		private readonly IDocXBuilderFactory _docXBuilderFactory = new DocXBuilderFactory();
-		private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new DummyTestSuiteForReportProvider();
+		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new DummyTestSuiteForReportProvider();
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new TFSPlanTestSuiteProvider();
+		private readonly ITestPlanForReportProvider _testPlanProvider = new DummyHierarchyForReportProvider();
 		private readonly IMessageBoxProvider _messageBoxProvider = new FlyoutMessageBoxProvider();
 		private readonly CancelableProgressOverlayFormManager _overlayFormManager = new CancelableProgressOverlayFormManager();
+		private readonly ISettingsHandler _settingsHandler = new SettingsHandler();
+		private readonly IFileTemplatesLoader _fileTemplatesLoader = new DocXFileTemplatesLoader();
+		private readonly IConnectionProvider _tfsConnectionProvider = new DummyConnectionProvider();
 
-		private TestSuiteForReport _testSuiteForReport;
+		private IList<IReportItem> _testPlanForReport;
 
 		private CancellationTokenSource tokenSource;
 		private CancellationToken cancellationToken;
@@ -34,36 +42,52 @@ namespace ReportGenerator
 		{
 			InitializeComponent();
 			InitAppSettings();
+			ResetTestConnectionIcon();
 		}
 
-		private void InitAppSettings()
+		private async void InitAppSettings()
 		{
-			InitTemplates();
-		}
-
-		private void InitTemplates()
-		{
-			var templatesPath = Properties.Settings.Default.TemplatesPath;
-			if (string.IsNullOrEmpty(templatesPath) || !Directory.Exists(templatesPath))
+			var settings = _settingsHandler?.Load();
+			if (settings == null)
 			{
 				return;
 			}
 
-			beTemplatesFolder.EditValue = templatesPath;
+			InitTemplate(settings);
+			await InitTFSConnection(settings);
+		}
 
-			UpdateAvailableTemplates(templatesPath);
-
-			var lastUsedTemplateName = Properties.Settings.Default.SelectedTemplate;
-			var dsTemplateInfo = GetDataSourceTemplateByName(lastUsedTemplateName);
-			if (string.IsNullOrEmpty(lastUsedTemplateName) || dsTemplateInfo == null)
+		private void InitTemplate(IAppSettings settings)
+		{
+			if (string.IsNullOrEmpty(settings.TemplateFullName) || !File.Exists(settings.TemplateFullName))
 			{
 				return;
 			}
+			
+			beTemplateFile.EditValue = settings.TemplateFullName;
+		}
 
-			beTemplates.EditValue = dsTemplateInfo.FullName;
+		private async Task InitTFSConnection(IAppSettings settings)
+		{
+			if (!string.IsNullOrEmpty(settings.TFSAddress))
+			{
+				beTFSAddress.EditValue = settings.TFSAddress;
+			}
+
+			if (!string.IsNullOrEmpty(settings.ProjectName))
+			{
+				beProjectName.EditValue = settings.ProjectName;
+			}
+
+			await CheckConnection();
 		}
 
 		private async void RefreshDataSource_ItemClick(object sender, ItemClickEventArgs e)
+		{
+			await RefreshDataSource();
+		}
+
+		private async Task RefreshDataSource()
 		{
 			IOverlaySplashScreenHandle overlayHandle = null;
 
@@ -84,11 +108,13 @@ namespace ReportGenerator
 					return;
 				}
 
-				_testSuiteForReport = newDataSource;
-				var testResultsDataSource = _testSuiteForReport.TestResults;
-				gridControl.DataSource = testResultsDataSource;
-				bsiRecordsCount.Caption = "Test cases : " + (testResultsDataSource?.Count ?? 0);
-				barSuiteName.Caption = _testSuiteForReport.TestSuiteCaption;
+				_testPlanForReport = newDataSource;
+				treeList.DataSource = _testPlanForReport;
+				treeList.ExpandToLevel(0);
+				//.Flatten().ToList();
+				//gridControl.DataSource = testResultsDataSource;
+				//bsiRecordsCount.Caption = "Test cases : " + (testResultsDataSource?.Count ?? 0);
+				//barSuiteName.Caption = _testPlanForReport.TestSuiteCaption;
 			}
 			catch (OperationCanceledException)
 			{
@@ -99,7 +125,7 @@ namespace ReportGenerator
 			catch (Exception ex)
 			{
 				_overlayFormManager.CloseOverlayForm(overlayHandle);
-				_messageBoxProvider.ShowErrorMessage(this, ex.Message, ex.GetType().ToString());
+				_messageBoxProvider.ShowErrorMessage(this, ex.Message, "Error");
 				return;
 			}
 			finally
@@ -131,10 +157,10 @@ namespace ReportGenerator
 				}
 				overlayHandle = _overlayFormManager.ShowOverlayForm(this, OnCancelButtonClick);
 				SetOverlayLabel("Loading data ...");
-				var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.FreeSpire, GetDataSourceForReport(cancellationToken, new Progress<string>(SetOverlayLabel))));
+				//var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.FreeSpire, GetDataSourceForReport(cancellationToken, new Progress<string>(SetOverlayLabel))));
 
 				SetOverlayLabel("Generating report ...");
-				document = await Task.Run(() => builder.CreateDocument(template, cancellationToken, new Progress<string>(SetOverlayLabel)));
+				//document = await Task.Run(() => builder.CreateDocument(template, cancellationToken, new Progress<string>(SetOverlayLabel)));
 			}
 			catch (OperationCanceledException)
 			{
@@ -145,7 +171,7 @@ namespace ReportGenerator
 			catch (Exception ex)
 			{
 				_overlayFormManager.CloseOverlayForm(overlayHandle);
-				_messageBoxProvider.ShowErrorMessage(this, ex.Message, ex.GetType().ToString());
+				_messageBoxProvider.ShowErrorMessage(this, ex.Message, "Error");
 				return;
 			}
 			finally
@@ -178,7 +204,7 @@ namespace ReportGenerator
 
 		private FileInfo GetTemplateFileInfo()
 		{
-			if(!(beTemplates.EditValue is string templateFullName))
+			if(!(beTemplateFile.EditValue is string templateFullName))
 			{
 				return null;
 			}
@@ -189,15 +215,6 @@ namespace ReportGenerator
 			}
 
 			return new FileInfo(templateFullName);
-		}
-
-		private void GridView_RowCellStyle(object sender, RowCellStyleEventArgs e)
-		{
-			GridView view = sender as GridView;
-			if (view.FocusedRowHandle == e.RowHandle)
-			{
-				e.Appearance.BackColor = view.PaintAppearance.FocusedRow.BackColor;
-			}
 		}
 
 		private void OnCancelButtonClick()
@@ -227,7 +244,7 @@ namespace ReportGenerator
 			}
 		}
 
-		private TestSuiteForReport GetNewDataSource(CancellationToken cancellationToken, IProgress<string> progress)
+		private IList<IReportItem> GetNewDataSource(CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			var testSuiteID = GetTestSuiteID();
 			if (testSuiteID == 0)
@@ -235,92 +252,56 @@ namespace ReportGenerator
 				return null;
 			}
 
-			return _testSuiteForReportProvider.GetData(testSuiteID, cancellationToken, progress);
+			return _testPlanProvider.GetData(testSuiteID, cancellationToken, progress);
 		}
 
-		private TestSuiteForReport GetDataSourceForReport(CancellationToken cancellationToken, IProgress<string> progress)
+		private IList<IReportItem> GetDataSourceForReport(CancellationToken cancellationToken, IProgress<string> progress)
 		{
-			return _testSuiteForReport ?? GetNewDataSource(cancellationToken, progress);
+			return _testPlanForReport ?? GetNewDataSource(cancellationToken, progress);
 		}
 
 		private void RepItemTestSuiteID_EditValueChanging(object sender, DevExpress.XtraEditors.Controls.ChangingEventArgs e)
 		{
-			bbiRefresh.Enabled = bbiGenerateReport.Enabled = ConvertToUint(e.NewValue) != 0;
-		}
-
-		private void UpdateAvailableTemplates(string templatesFolderPath)
-		{
-			var templates = GetTemplatesFromPath(templatesFolderPath);
-			templatesLookUpEdit.DataSource = templates;
-		}
-
-		private IEnumerable<TemplateInfo> GetTemplatesFromPath(string templatesFolderPath)
-		{
-			if (string.IsNullOrEmpty(templatesFolderPath) || !Directory.Exists(templatesFolderPath))
-			{
-				return Enumerable.Empty<TemplateInfo>();
-			}
-
-			return Directory.GetFiles(templatesFolderPath, "*.docx")
-				.Select(fullName =>
-				{
-					var fi = new FileInfo(fullName);
-					return new TemplateInfo(fi.Name, fi.FullName);
-				})
-				.OrderBy(ti => ti.Name);
+			bbiRefresh.Enabled = bbiGenerateReport.Enabled = (string)e.NewValue != string.Empty;
 		}
 
 		private void TemplatesFolderRepositoryItem_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
 		{
-			using (var xtraFolderBrowserDialog = new XtraFolderBrowserDialog())
+			using (var xtraOpenFileDialog = new XtraOpenFileDialog())
 			{
-				xtraFolderBrowserDialog.DialogStyle = FolderBrowserDialogStyle.Wide;
-				var result = xtraFolderBrowserDialog.ShowDialog();
+				xtraOpenFileDialog.Filter = "Template|*.docx";
+				var result = xtraOpenFileDialog.ShowDialog();
 				if (result == DialogResult.OK)
 				{
-					var selectedFolder = xtraFolderBrowserDialog.SelectedPath;
-					beTemplatesFolder.EditValue = selectedFolder;
-
-					UpdateAvailableTemplates(selectedFolder);
-					beTemplates.EditValue = string.Empty;
-
-					Properties.Settings.Default.TemplatesPath = selectedFolder;
-					Properties.Settings.Default.Save();
+					var selectedFolder = xtraOpenFileDialog.FileName;
+					beTemplateFile.EditValue = selectedFolder;
 				}
 			}
 		}
 
-		private void BeTemplates_EditValueChanged(object sender, EventArgs e)
+		private void TreeList_KeyDown(object sender, KeyEventArgs e)
 		{
-			SaveSelectedTemplate();
-		}
-
-		private void SaveSelectedTemplate()
-		{
-			if (!(beTemplates.EditValue is string fullTemplatePath))
+			if (e.KeyCode == Keys.Right)
 			{
-				return;
+				if (treeList.FocusedNode.Expanded)
+				{
+					treeList.MoveNext();
+				}
+				else
+				{
+					treeList.FocusedNode.Expanded = true;
+				}
 			}
-
-			Properties.Settings.Default.SelectedTemplate = fullTemplatePath;
-			Properties.Settings.Default.Save();
-		}
-
-		private TemplateInfo GetDataSourceTemplateByName(string templateName)
-		{
-			if (!(templatesLookUpEdit.DataSource is IEnumerable<TemplateInfo> dataSource))
+			if (e.KeyCode == Keys.Left)
 			{
-				return null;
-			}
-
-			return dataSource.FirstOrDefault(item => item.FullName.Equals(templateName));
-		}
-
-		private void templatesLookUpEdit_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
-		{
-			if(e.Button.Index == 1)
-			{
-				beTemplates.EditValue = string.Empty;
+				if (treeList.FocusedNode.Expanded)
+				{
+					treeList.FocusedNode.Expanded = false;
+				}
+				else
+				{
+					treeList.MovePrev();
+				}
 			}
 		}
 
@@ -336,18 +317,146 @@ namespace ReportGenerator
 			}
 			base.Dispose(disposing);
 		}
-	}
 
-	public class TemplateInfo
-	{
-		public string Name { get; }
-
-		public string FullName { get; }
-
-		public TemplateInfo(string name, string fullName)
+		private void ReportGeneratorMainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			Name = name;
-			FullName = fullName;
+			var tempSettings = new TemplateSettings
+			{
+				TemplateFullName = beTemplateFile.EditValue as string,
+				ProjectName = beProjectName.EditValue as string,
+				TFSAddress = beTFSAddress.EditValue as string
+			};
+
+			try
+			{
+				_settingsHandler?.Save(tempSettings);
+			}
+			catch
+			{
+			}
+		}
+
+		private void treeList_GetStateImage(object sender, GetStateImageEventArgs e)
+		{
+			var currentDataRecord = treeList.GetDataRecordByNode(e.Node);
+			if (!(currentDataRecord is IReportItem currentReportItem))
+			{
+				return;
+			}
+
+			if (currentDataRecord is TestPlan)
+			{
+				e.NodeImageIndex = 0;
+			}
+			else if (currentDataRecord is TestSuite)
+			{
+				e.NodeImageIndex = 1;
+			}
+			else if (currentDataRecord is TestCase)
+			{
+				e.NodeImageIndex = 2;
+			}
+		}
+
+		private void treeList_NodeCellStyle(object sender, GetCustomNodeCellStyleEventArgs e)
+		{
+			if (e.Node.HasChildren)
+			{
+				e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
+			}
+		}
+
+		private void treeList_PopupMenuShowing(object sender, DevExpress.XtraTreeList.PopupMenuShowingEventArgs e)
+		{
+			if (e.Menu is TreeListNodeMenu)
+			{
+				treeList.FocusedNode = ((TreeListNodeMenu)e.Menu).Node;
+				e.Menu.Items.Add(new DXMenuItem("Expand all", (sndr, args) => treeList.ExpandAll(), treeListPopUpMenuImageCollection.Images[0]));
+				e.Menu.Items.Add(new DXMenuItem("Collapse all", (sndr, args) => treeList.CollapseAll(), treeListPopUpMenuImageCollection.Images[1]));
+				//open
+				//print
+			}
+		}
+
+		private void repItemTFSAddress_EditValueChanged(object sender, EventArgs e)
+		{
+			ResetTestConnectionIcon();
+		}
+
+		private void repItemProjectName_EditValueChanged(object sender, EventArgs e)
+		{
+			ResetTestConnectionIcon();
+		}
+
+		private void SetAddressEnabled(bool enabled)
+		{
+			beTFSAddress.Enabled = enabled;
+			beProjectName.Enabled = enabled;
+		}
+
+		private void ResetTestConnectionIcon()
+		{
+			testConnectionBarItem.EditValue = testConnectionImageCollection.Images[0];//Properties.Resources.Loading_InitFrame;
+		}
+
+		private async Task CheckConnection()
+		{
+			SetAddressEnabled(false);
+			testConnectionBarItem.EditValue = Properties.Resources.Loading;
+			try
+			{
+				bool connected = await TryConnect();
+				if (connected)
+				{
+					testConnectionBarItem.EditValue = testConnectionImageCollection.Images[1];
+				}
+				else
+				{
+					testConnectionBarItem.EditValue = testConnectionImageCollection.Images[2];
+				}
+			}
+			finally
+			{
+				SetAddressEnabled(true);
+			}
+		}
+
+		private async Task<bool> TryConnect()
+		{
+			try
+			{
+				return await Task.Run(() => _tfsConnectionProvider.Test(new TFSSettings(new Uri((string)beTFSAddress.EditValue), (string)beProjectName.EditValue)));
+			}
+			catch (Exception)
+			{
+				ResetTestConnectionIcon();
+				return false;
+				//_messageBoxProvider.ShowErrorMessage(this, "Invalid uri format.", "Uri error");
+			}
+		}
+
+		private async void testConnectionRepItem_Click(object sender, EventArgs e)
+		{
+			await CheckConnection();
+		}
+
+		private async void btnSelectConnection_ItemClick(object sender, ItemClickEventArgs e)
+		{
+			using(var projectPicker = new TeamProjectPicker(TeamProjectPickerMode.SingleProject, false))
+			{
+				var dialogResult = projectPicker.ShowDialog();
+				if(dialogResult == DialogResult.Cancel)
+				{
+					return;
+				}
+
+				var uri = projectPicker.SelectedTeamProjectCollection.Uri;
+				var project = projectPicker.SelectedProjects[0];
+
+				beTFSAddress.EditValue = uri;
+				beProjectName.EditValue = project;
+				await CheckConnection();
+			}
 		}
 	}
 }
