@@ -3,65 +3,82 @@ using System.IO;
 using ReportGenerator.Extenders;
 using Spire.Doc;
 using System.Threading;
+using ReportGenerator.Model;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ReportGenerator.DocXCreation
 {
 	internal class SpireDocXBuilder : IDocXBuilder
 	{
-		private readonly string _finalDocumentPath = Path.GetTempPath() + "Report.docx";
-		protected readonly TestSuiteForReport _testSuiteForReport;
-
+		private readonly string _finalDocumentPath = Path.GetTempPath() + Path.GetRandomFileName() + ".docx";//Path.GetTempPath() + "Report.docx";
 		private const int CHUNK_SIZE = 25;
 
-		public SpireDocXBuilder(TestSuiteForReport testSuiteForReport)
+		public FileInfo CreateDocument(FileInfo template, IEnumerable<IReportItem> rootReportItem, CancellationToken cancellationToken, IProgress<string> progress)
 		{
-			_testSuiteForReport = testSuiteForReport;
-		}
-
-		public FileInfo CreateDocument(FileInfo docTemplate, CancellationToken cancellationToken, IProgress<string> progress)
-		{
-			if (_testSuiteForReport == null)
+			if (rootReportItem == null)
 			{
-				throw new ArgumentNullException(nameof(_testSuiteForReport));
+				throw new ArgumentNullException(nameof(rootReportItem));
 			}
 
-			var templateFullPath = GetDocTemplate(docTemplate).FullName;
-
+			var templateFullPath = GetDocTemplate(template).FullName;
 			File.Copy(templateFullPath, _finalDocumentPath, true);
 
-			//free spiro is limited to 25 tables per section => after every 25 test cases needs to be new section
-			var testResultsChunks = _testSuiteForReport.TestResults.Chunk(CHUNK_SIZE);
-
-			ProgressReport(progress, "Creating DocX file");
+			//var nestedLevel = 0;
 			var doc = new Document(_finalDocumentPath);
-			var section = doc.LastSection ?? doc.AddSection();
 
-			ProgressReport(progress, "Generating test suite information");
-			var testSuiteHeaderBuilder = new TestSuiteBlockBuilder(section);
-			testSuiteHeaderBuilder.AppendTestSuiteInformation(_testSuiteForReport);
+			//GenerateFinalReport(doc, rootReportItem, nestedLevel, cancellationToken, progress);
 
-			var actualTestCase = 0;
-			foreach (var testResultsChunk in testResultsChunks)
-			{
-				var testCaseBlockBuilder = new TestCaseBlockBuilder(section);
-				foreach (var testResultForReport in testResultsChunk)
-				{
-					actualTestCase++;
-					ProgressReport(progress, $"Generating test case {actualTestCase}/{_testSuiteForReport.TestResults.Count} ...");
-					testCaseBlockBuilder.Build(_testSuiteForReport, testResultForReport);
-					cancellationToken.ThrowIfCancellationRequested();
-				}
-				section = doc.AddSection();
-			}
+			////free spiro is limited to 25 tables per section => after every 25 test cases needs to be new section
+			//var testResultsChunks = reportItem.TestResults.Chunk(CHUNK_SIZE);
+
+			//ProgressReport(progress, "Creating DocX file");
+			//var doc = new Document(_finalDocumentPath);
+			//var section = doc.LastSection ?? doc.AddSection();
+
+			//ProgressReport(progress, "Generating test suite information");
+			//var testSuiteHeaderBuilder = new TestSuiteBlockBuilder(section);
+			//testSuiteHeaderBuilder.AppendTestSuiteInformation(reportItem);
+
+			//var actualTestCase = 0;
+			//foreach (var testResultsChunk in testResultsChunks)
+			//{
+			//	var testCaseBlockBuilder = new TestCaseBlockBuilder(section);
+			//	foreach (var testResultForReport in testResultsChunk)
+			//	{
+			//		actualTestCase++;
+			//		ProgressReport(progress, $"Generating test case {actualTestCase}/{reportItem.TestResults.Count} ...");
+			//		testCaseBlockBuilder.Build(reportItem, testResultForReport);
+			//		cancellationToken.ThrowIfCancellationRequested();
+			//	}
+			//	section = doc.AddSection();
+			//}
 
 			doc.SaveToFile(_finalDocumentPath);
 
-			if (docTemplate == null)
-			{
-				ClearTempFiles(templateFullPath);
-			}
+			//if (docTemplate == null)
+			//{
+			//	ClearTempFiles(templateFullPath);
+			//}
 
 			return new FileInfo(_finalDocumentPath);
+		}
+
+		private void GenerateFinalReport(Document doc, IReportItem rootReportItem, int level, CancellationToken cancellationToken, IProgress<string> progress)
+		{
+			var testSuites = rootReportItem.Children.OfType<TestSuite>();
+			var testCases = rootReportItem.Children.OfType<TestCase>();
+			var section = doc.AddSection();
+			foreach(var testSuite in testSuites)
+			{
+
+			}
+
+			var testCasesChunks = testCases.Chunk(CHUNK_SIZE);
+			foreach (var testCase in testCases)
+			{
+				var testCaseBlockBuilder = new TestCaseBlockBuilder(section);
+			}
 		}
 
 		private FileInfo GetDocTemplate(FileInfo providedTemplate)

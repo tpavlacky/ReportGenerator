@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using ReportGenerator.Extenders;
 using Spire.Doc;
 using Spire.Doc.Documents;
 
@@ -28,7 +27,6 @@ namespace ReportGenerator.DocXCreation
         AppendHyperlink(par, CreateTestSuiteHyperlink(testSuite));
         par.AppendText($": {testSuite.TestSuiteCaption}");
 				par.ApplyStyle(StyleNames.HEADING_1);
-				//par.ApplyStyleSafe(nameof(_testReportStyles.TestSuiteHeader));
       }
 
       void AppendTestCasesCount()

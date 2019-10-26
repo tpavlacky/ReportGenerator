@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ReportGenerator.Model;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -6,6 +8,6 @@ namespace ReportGenerator.DocXCreation
 {
     internal interface IDocXBuilder
     {
-        FileInfo CreateDocument(FileInfo docTemplate, CancellationToken cancellationToken, IProgress<string> progress);
+        FileInfo CreateDocument(FileInfo template, IEnumerable<IReportItem> reportItems, CancellationToken cancellationToken, IProgress<string> progress);
     }
 }

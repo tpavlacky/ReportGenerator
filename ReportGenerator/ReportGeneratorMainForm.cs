@@ -18,6 +18,7 @@ using DevExpress.Utils.Menu;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
+using System.Linq;
 
 namespace ReportGenerator
 {
@@ -111,10 +112,6 @@ namespace ReportGenerator
 				_testPlanForReport = newDataSource;
 				treeList.DataSource = _testPlanForReport;
 				treeList.ExpandToLevel(0);
-				//.Flatten().ToList();
-				//gridControl.DataSource = testResultsDataSource;
-				//bsiRecordsCount.Caption = "Test cases : " + (testResultsDataSource?.Count ?? 0);
-				//barSuiteName.Caption = _testPlanForReport.TestSuiteCaption;
 			}
 			catch (OperationCanceledException)
 			{
@@ -157,10 +154,11 @@ namespace ReportGenerator
 				}
 				overlayHandle = _overlayFormManager.ShowOverlayForm(this, OnCancelButtonClick);
 				SetOverlayLabel("Loading data ...");
-				//var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.FreeSpire, GetDataSourceForReport(cancellationToken, new Progress<string>(SetOverlayLabel))));
+				var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.DocX));
 
 				SetOverlayLabel("Generating report ...");
-				//document = await Task.Run(() => builder.CreateDocument(template, cancellationToken, new Progress<string>(SetOverlayLabel)));
+				var progress = new Progress<string>(SetOverlayLabel);
+				document = await Task.Run(() => builder.CreateDocument(template, GetDataSourceForReport(cancellationToken, progress), cancellationToken, progress));
 			}
 			catch (OperationCanceledException)
 			{
@@ -281,6 +279,11 @@ namespace ReportGenerator
 
 		private void TreeList_KeyDown(object sender, KeyEventArgs e)
 		{
+			if(treeList.FocusedNode == null)
+			{
+				return;
+			}
+
 			if (e.KeyCode == Keys.Right)
 			{
 				if (treeList.FocusedNode.Expanded)
@@ -336,7 +339,7 @@ namespace ReportGenerator
 			}
 		}
 
-		private void treeList_GetStateImage(object sender, GetStateImageEventArgs e)
+		private void TreeList_GetStateImage(object sender, GetStateImageEventArgs e)
 		{
 			var currentDataRecord = treeList.GetDataRecordByNode(e.Node);
 			if (!(currentDataRecord is IReportItem currentReportItem))
@@ -358,7 +361,7 @@ namespace ReportGenerator
 			}
 		}
 
-		private void treeList_NodeCellStyle(object sender, GetCustomNodeCellStyleEventArgs e)
+		private void TreeList_NodeCellStyle(object sender, GetCustomNodeCellStyleEventArgs e)
 		{
 			if (e.Node.HasChildren)
 			{
@@ -366,7 +369,7 @@ namespace ReportGenerator
 			}
 		}
 
-		private void treeList_PopupMenuShowing(object sender, DevExpress.XtraTreeList.PopupMenuShowingEventArgs e)
+		private void TreeList_PopupMenuShowing(object sender, DevExpress.XtraTreeList.PopupMenuShowingEventArgs e)
 		{
 			if (e.Menu is TreeListNodeMenu)
 			{
@@ -378,12 +381,12 @@ namespace ReportGenerator
 			}
 		}
 
-		private void repItemTFSAddress_EditValueChanged(object sender, EventArgs e)
+		private void RepItemTFSAddress_EditValueChanged(object sender, EventArgs e)
 		{
 			ResetTestConnectionIcon();
 		}
 
-		private void repItemProjectName_EditValueChanged(object sender, EventArgs e)
+		private void RepItemProjectName_EditValueChanged(object sender, EventArgs e)
 		{
 			ResetTestConnectionIcon();
 		}
@@ -435,12 +438,12 @@ namespace ReportGenerator
 			}
 		}
 
-		private async void testConnectionRepItem_Click(object sender, EventArgs e)
+		private async void TestConnectionRepItem_Click(object sender, EventArgs e)
 		{
 			await CheckConnection();
 		}
 
-		private async void btnSelectConnection_ItemClick(object sender, ItemClickEventArgs e)
+		private async void BtnSelectConnection_ItemClick(object sender, ItemClickEventArgs e)
 		{
 			using(var projectPicker = new TeamProjectPicker(TeamProjectPickerMode.SingleProject, false))
 			{

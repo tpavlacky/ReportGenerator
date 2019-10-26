@@ -236,7 +236,7 @@
 			// 
 			this.repItemTFSAddress.AutoHeight = false;
 			this.repItemTFSAddress.Name = "repItemTFSAddress";
-			this.repItemTFSAddress.EditValueChanged += new System.EventHandler(this.repItemTFSAddress_EditValueChanged);
+			this.repItemTFSAddress.EditValueChanged += new System.EventHandler(this.RepItemTFSAddress_EditValueChanged);
 			// 
 			// beProjectName
 			// 
@@ -252,7 +252,7 @@
 			// 
 			this.repItemProjectName.AutoHeight = false;
 			this.repItemProjectName.Name = "repItemProjectName";
-			this.repItemProjectName.EditValueChanged += new System.EventHandler(this.repItemProjectName_EditValueChanged);
+			this.repItemProjectName.EditValueChanged += new System.EventHandler(this.RepItemProjectName_EditValueChanged);
 			// 
 			// barButtonItem3
 			// 
@@ -283,7 +283,7 @@
 			this.testConnectionRepItem.Name = "testConnectionRepItem";
 			this.testConnectionRepItem.ShowMenu = false;
 			this.testConnectionRepItem.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
-			this.testConnectionRepItem.Click += new System.EventHandler(this.testConnectionRepItem_Click);
+			this.testConnectionRepItem.Click += new System.EventHandler(this.TestConnectionRepItem_Click);
 			// 
 			// ribbonPage1
 			// 
@@ -506,9 +506,9 @@
 			this.treeList.StateImageList = this.treeListNodeTypesImageCollection;
 			this.treeList.TabIndex = 5;
 			this.treeList.TreeLevelWidth = 12;
-			this.treeList.GetStateImage += new DevExpress.XtraTreeList.GetStateImageEventHandler(this.treeList_GetStateImage);
-			this.treeList.NodeCellStyle += new DevExpress.XtraTreeList.GetCustomNodeCellStyleEventHandler(this.treeList_NodeCellStyle);
-			this.treeList.PopupMenuShowing += new DevExpress.XtraTreeList.PopupMenuShowingEventHandler(this.treeList_PopupMenuShowing);
+			this.treeList.GetStateImage += new DevExpress.XtraTreeList.GetStateImageEventHandler(this.TreeList_GetStateImage);
+			this.treeList.NodeCellStyle += new DevExpress.XtraTreeList.GetCustomNodeCellStyleEventHandler(this.TreeList_NodeCellStyle);
+			this.treeList.PopupMenuShowing += new DevExpress.XtraTreeList.PopupMenuShowingEventHandler(this.TreeList_PopupMenuShowing);
 			this.treeList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TreeList_KeyDown);
 			// 
 			// colURL
@@ -562,7 +562,7 @@
 			this.btnSelectConnection.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectConnection.ImageOptions.Image")));
 			this.btnSelectConnection.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnSelectConnection.ImageOptions.LargeImage")));
 			this.btnSelectConnection.Name = "btnSelectConnection";
-			this.btnSelectConnection.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnSelectConnection_ItemClick);
+			this.btnSelectConnection.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.BtnSelectConnection_ItemClick);
 			// 
 			// ReportGeneratorMainForm
 			// 

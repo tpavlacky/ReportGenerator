@@ -5,6 +5,6 @@ namespace ReportGenerator
 {
     internal interface IDocXBuilderFactory
     {
-        IDocXBuilder GetDocXBuilder(DocXBuilderType builderType, TestSuiteForReport testSuiteForReport);
+        IDocXBuilder GetDocXBuilder(DocXBuilderType builderType);
     }
 }
