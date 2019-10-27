@@ -43,12 +43,14 @@
 			this.barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
 			this.testConnectionBarItem = new DevExpress.XtraBars.BarEditItem();
 			this.testConnectionRepItem = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
+			this.btnSelectConnection = new DevExpress.XtraBars.BarButtonItem();
 			this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
 			this.pageGroupTCLoad = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
 			this.pageGroupExport = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
 			this.ribbonTemplate = new DevExpress.XtraBars.Ribbon.RibbonPage();
 			this.templatesRibbonPageGroup = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
 			this.ribbonPage2 = new DevExpress.XtraBars.Ribbon.RibbonPage();
+			this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
 			this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
 			this.repositoryItemButtonEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
 			this.cbTemplates = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
@@ -70,8 +72,6 @@
 			this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
 			this.treeListPopUpMenuImageCollection = new DevExpress.Utils.ImageCollection(this.components);
 			this.testConnectionImageCollection = new DevExpress.Utils.ImageCollection(this.components);
-			this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-			this.btnSelectConnection = new DevExpress.XtraBars.BarButtonItem();
 			((System.ComponentModel.ISupportInitialize)(this.testResultForReportBindingSource)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.repItemTestSuiteID)).BeginInit();
@@ -221,7 +221,7 @@
 			this.barButtonItem2.Id = 33;
 			this.barButtonItem2.Name = "barButtonItem2";
 			// 
-			// beTFSAddressBase
+			// beTFSAddress
 			// 
 			this.beTFSAddress.AutoFillWidthInMenu = DevExpress.Utils.DefaultBoolean.True;
 			this.beTFSAddress.Caption = "TFS address:  ";
@@ -230,7 +230,7 @@
 			this.beTFSAddress.EditValue = "https://tfs.dev.its:8090/tfs/Office%204.6/";
 			this.beTFSAddress.EditWidth = 250;
 			this.beTFSAddress.Id = 34;
-			this.beTFSAddress.Name = "beTFSAddressBase";
+			this.beTFSAddress.Name = "beTFSAddress";
 			// 
 			// repItemTFSAddress
 			// 
@@ -285,6 +285,15 @@
 			this.testConnectionRepItem.SizeMode = DevExpress.XtraEditors.Controls.PictureSizeMode.Stretch;
 			this.testConnectionRepItem.Click += new System.EventHandler(this.TestConnectionRepItem_Click);
 			// 
+			// btnSelectConnection
+			// 
+			this.btnSelectConnection.Caption = "Select connection";
+			this.btnSelectConnection.Id = 58;
+			this.btnSelectConnection.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectConnection.ImageOptions.Image")));
+			this.btnSelectConnection.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnSelectConnection.ImageOptions.LargeImage")));
+			this.btnSelectConnection.Name = "btnSelectConnection";
+			this.btnSelectConnection.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.BtnSelectConnection_ItemClick);
+			// 
 			// ribbonPage1
 			// 
 			this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -332,6 +341,12 @@
             this.ribbonPageGroup1});
 			this.ribbonPage2.Name = "ribbonPage2";
 			this.ribbonPage2.Text = "Settings";
+			// 
+			// ribbonPageGroup2
+			// 
+			this.ribbonPageGroup2.ItemLinks.Add(this.btnSelectConnection);
+			this.ribbonPageGroup2.Name = "ribbonPageGroup2";
+			this.ribbonPageGroup2.ShowCaptionButton = false;
 			// 
 			// ribbonPageGroup1
 			// 
@@ -515,7 +530,7 @@
 			// 
 			this.colURL.Caption = "Open";
 			this.colURL.ColumnEdit = this.repItemColIDHyperlinkEdit;
-			this.colURL.FieldName = "URL";
+			this.colURL.FieldName = "URI";
 			this.colURL.Name = "colURL";
 			this.colURL.OptionsColumn.ReadOnly = true;
 			this.colURL.Visible = true;
@@ -548,21 +563,6 @@
 			this.testConnectionImageCollection.Images.SetKeyName(0, "refresh_32x32.png");
 			this.testConnectionImageCollection.Images.SetKeyName(1, "apply_32x32.png");
 			this.testConnectionImageCollection.Images.SetKeyName(2, "cancel_32x32.png");
-			// 
-			// ribbonPageGroup2
-			// 
-			this.ribbonPageGroup2.ItemLinks.Add(this.btnSelectConnection);
-			this.ribbonPageGroup2.Name = "ribbonPageGroup2";
-			this.ribbonPageGroup2.ShowCaptionButton = false;
-			// 
-			// btnSelectConnection
-			// 
-			this.btnSelectConnection.Caption = "Select connection";
-			this.btnSelectConnection.Id = 58;
-			this.btnSelectConnection.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnSelectConnection.ImageOptions.Image")));
-			this.btnSelectConnection.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnSelectConnection.ImageOptions.LargeImage")));
-			this.btnSelectConnection.Name = "btnSelectConnection";
-			this.btnSelectConnection.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.BtnSelectConnection_ItemClick);
 			// 
 			// ReportGeneratorMainForm
 			// 

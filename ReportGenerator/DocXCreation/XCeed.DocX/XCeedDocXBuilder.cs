@@ -35,8 +35,8 @@ namespace ReportGenerator.DocXCreation.XCeed
 
 		private void GenerateReportItem(XC.DocX doc, IReportItem reportItem, uint level, CancellationToken cancellationToken, IProgress<string> progress)
 		{
-			var blockBuilder = _blockBuilderFactory.GetBlockBuilder(reportItem);
-			blockBuilder.Build(doc, reportItem, level, cancellationToken, progress);
+			var blockBuilder = _blockBuilderFactory.GetBlockBuilder(doc, reportItem);
+			blockBuilder.Build(reportItem, level, cancellationToken, progress);
 
 			var testCases = reportItem.Children.OfType<TestCase>();
 			foreach (var testCase in testCases)

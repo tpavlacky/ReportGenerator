@@ -245,10 +245,11 @@
     <Compile Include="DataProviders\TFSTestSuiteDataProvider\TFSPlanTestSuiteProvider.cs" />
     <Compile Include="DocXCreation\DefaultTemplateLoader.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilderFactory.cs" />
+    <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\BlockBuilder.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\IBlockBuilder.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\XCeedTestCaseBlockBuilder.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\XCeedTestSuiteBlockBuilder.cs" />
-    <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\IBlockBuilderFactory.cs" />
+    <Compile Include="DocXCreation\XCeed.DocX\IBlockBuilderFactory.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\XCeedDocXBuilder.cs" />
     <Compile Include="FileTemplatesLoader.cs" />
     <Compile Include="IFileTemplatesLoader.cs" />
@@ -311,6 +312,7 @@
     <Compile Include="UIComponents\UserControls\TestCaseDataGrid.Designer.cs">
       <DependentUpon>TestCaseDataGrid.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -343,6 +345,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Resources\Template_empty.docx" />
+    <None Include="Resources\Template.docx" />
     <None Include="Templates\TestTemplate.docx" />
   </ItemGroup>
   <ItemGroup>

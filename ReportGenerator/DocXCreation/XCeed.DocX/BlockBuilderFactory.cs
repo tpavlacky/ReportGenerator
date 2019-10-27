@@ -1,33 +1,48 @@
 ﻿using ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders;
 using ReportGenerator.Model;
 using System;
+using Xceed.Document.NET;
 
 namespace ReportGenerator.DocXCreation.XCeed
 {
 	internal class BlockBuilderFactory : IBlockBuilderFactory
 	{
-		private readonly IBlockBuilder _testCaseBlockBuilder = new XCeedTestCaseBlockBuilder();
-		private readonly IBlockBuilder _testSuiteBlockBuilder = new XCeedTestSuiteBlockBuilder();
+		private BlockBuilder _testCaseBlockBuilder;
+		private BlockBuilder _testSuiteBlockBuilder;
 
-		public IBlockBuilder GetBlockBuilder(IReportItem reportItem)
+		public BlockBuilder GetBlockBuilder(Document document, IReportItem reportItem)
 		{
 			if(reportItem is TestCase)
 			{
-				return _testCaseBlockBuilder;
+				return GetTestCaseBlockBuilder(document);
 			}
 
-			if(reportItem is TestSuite)
+			if(reportItem is TestSuite || reportItem is TestPlan)
 			{
-				return _testSuiteBlockBuilder;
-			}
-
-			//remove
-			if(reportItem is TestPlan)
-			{
-				return _testSuiteBlockBuilder;
+				return GetTestSuiteBlockBuilder(document);
 			}
 
 			throw new Exception("Unknown type of IReportItem");
+		}
+
+		private BlockBuilder GetTestCaseBlockBuilder(Document document)
+		{
+			if(_testCaseBlockBuilder == null)
+			{
+				_testCaseBlockBuilder = new XCeedTestCaseBlockBuilder(document);
+			}
+
+			return _testCaseBlockBuilder;
+		}
+
+		private BlockBuilder GetTestSuiteBlockBuilder(Document document)
+		{
+			if(_testSuiteBlockBuilder == null)
+			{
+				_testSuiteBlockBuilder = new XCeedTestSuiteBlockBuilder(document);
+			}
+
+			return _testSuiteBlockBuilder;
 		}
 	}
 }

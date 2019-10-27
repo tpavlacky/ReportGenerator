@@ -20,39 +20,47 @@ namespace ReportGenerator.Model
 
 		public IList<IReportItem> Children { get; }
 
-		public Uri URL { get; }
+		public Uri URI { get; }
 
-		protected ReportItem(int id, int parentID, string caption, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url)
+		public string Summary { get; }
+
+		protected ReportItem(int id, int parentID, string caption, string summary, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url)
 		{
 			ID = id;
 			ParentID = parentID;
 			Caption = caption;
+			Summary = summary;
 			TestOutcome = testOutcome;
 			TestedBy = testedBy;
 			TestedDate = testedDate;
 			Children = children;
-			URL = url;
+			URI = url;
 		}
 	}
 
 	public class TestPlan : ReportItem
 	{
-		public TestPlan(int id, int parentID, string caption, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url) : base(id, parentID, caption, testOutcome, testedBy, testedDate, children, url)
+		public TestPlan(int id, int parentID, string caption, string summary, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url) : base(id, parentID, caption, summary, testOutcome, testedBy, testedDate, children, url)
 		{
 		}
 	}
 
 	public class TestSuite : ReportItem
 	{
-		public TestSuite(int id, int parentID, string caption, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url) : base(id, parentID, caption, testOutcome, testedBy, testedDate, children, url)
+		public TestSuite(int id, int parentID, string caption, string summary, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url) : base(id, parentID, caption, summary, testOutcome, testedBy, testedDate, children, url)
 		{
 		}
 	}
 
 	public class TestCase : ReportItem
 	{
-		public TestCase(int id, int parentID, string caption, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url) : base(id, parentID, caption, testOutcome, testedBy, testedDate, children, url)
+		public string Configuration { get; }
+		public TimeSpan Duration { get; }
+
+		public TestCase(int id, int parentID, string caption, string summary, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url, string configuration, TimeSpan duration) : base(id, parentID, caption, summary, testOutcome, testedBy, testedDate, children, url)
 		{
+			Configuration = configuration;
+			Duration = duration;
 		}
 	}
 
@@ -64,7 +72,9 @@ namespace ReportGenerator.Model
 
 		string Caption { get; }
 
-		Uri URL { get; }
+		string Summary { get; }
+
+		Uri URI { get; }
 
 		TestOutcome? TestOutcome { get; }
 		
