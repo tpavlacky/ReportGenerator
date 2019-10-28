@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace ReportGenerator
 {
-	public class DummyTestSuiteForReportProvider : ITestSuiteForReportProvider
+	public class DummyTestSuiteForReportProvider : ISimpleTestSuiteDataProvider
 	{
 		private readonly Random _rand = new Random();
 

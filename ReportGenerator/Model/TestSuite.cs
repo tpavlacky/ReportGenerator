@@ -6,7 +6,13 @@ namespace ReportGenerator.Model
 {
 	public class TestSuite : ReportItem
 	{
-		public TestSuite(int id, int parentID, string caption, string summary, TestOutcome? testOutcome, string testedBy, DateTime? testedDate, IList<IReportItem> children, Uri url) : base(id, parentID, caption, summary, testOutcome, testedBy, testedDate, children, url)
+		public TestSuite(int id, int parentID, string caption, Uri url) 
+			: base(id, parentID, caption, string.Empty, null, string.Empty, null, url)
+		{
+		}
+
+		public TestSuite(int id, int parentID, string caption, IList<IReportItem> children, Uri url)
+	: base(id, parentID, caption, string.Empty, null, string.Empty, null, children, url)
 		{
 		}
 	}

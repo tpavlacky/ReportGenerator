@@ -5,12 +5,7 @@ using System.Threading;
 
 namespace ReportGenerator
 {
-	public interface ITestSuiteForReportProvider
-	{
-		TestSuiteForReport GetData(uint testSuiteID, CancellationToken cancellationToken, IProgress<string> progress);
-	}
-
-	public interface ITestPlanForReportProvider
+	public interface IReportItemsProvider
 	{
 		IList<IReportItem> GetData(uint testPlanID, CancellationToken cancellationToken, IProgress<string> progress);
 	}

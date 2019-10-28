@@ -7,13 +7,13 @@ using Microsoft.TeamFoundation.TestManagement.Client;
 
 namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 {
-	public class DummyHierarchyForReportProvider : ITestPlanForReportProvider
+	public class DummyHierarchyForReportProvider : IReportItemsProvider
 	{
 		private Random _random = new Random();
 
 		public IList<IReportItem> GetData(uint testSuiteID, CancellationToken cancellationToken, IProgress<string> progress)
 		{
-			return new List<IReportItem>{new TestPlan(0, 0, "Regression dummy test plan", GetRandomTestSummary(), null, string.Empty, null, new List<IReportItem>
+			return new List<IReportItem>{new TestPlan(0, 0, "Regression dummy test plan", new List<IReportItem>
 			{
 				CreateTestSuite(1, 0,
 					new List<IReportItem>
@@ -76,7 +76,7 @@ namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 
 		private TestSuite CreateTestSuite(int id, int parentID, IList<IReportItem> items)
 		{
-			return new TestSuite(id, parentID, $"Dummy test suite {id}", GetRandomTestSummary(), null, string.Empty, null, items, new Uri("http://www.seznam.cz"));
+			return new TestSuite(id, parentID, $"Dummy test suite {id}", items, new Uri("http://www.seznam.cz"));
 		}
 
 		//private void AddTestCase(TestSuite testSuite, int testCaseID)
@@ -86,8 +86,7 @@ namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 
 		private TestCase CreateTestCase(int id, int parentID)
 		{
-			return new TestCase(id, parentID, $"Caption for TC {id}", GetRandomTestSummary(), GetRandomTestOutcome(), "Tested by someone", DateTime.Now, new List<IReportItem>(0), new Uri("http://www.idnes.cz"), "Win 10-64 bit", TimeSpan.FromSeconds(_random.Next(0, 50)
-));
+			return new TestCase(id, parentID, $"Caption for TC {id}", GetRandomTestSummary(), GetRandomTestOutcome(), "Tested by someone", DateTime.Now, new List<IReportItem>(0), new Uri("http://www.idnes.cz"), "Win 10-64 bit", TimeSpan.FromSeconds(_random.Next(0, 50)), 10, 20);
 		}
 
 		private TestOutcome GetRandomTestOutcome()

@@ -243,7 +243,8 @@
   <ItemGroup>
     <Compile Include="Connection\DummyConnectionProvider.cs" />
     <Compile Include="DataProviders\Dummy\Hierarchy\DummyHierarchyForReportProvider.cs" />
-    <Compile Include="DataProviders\TFSTestSuiteDataProvider\TFSPlanTestSuiteProvider.cs" />
+    <Compile Include="DataProviders\IReportItemsProvider.cs" />
+    <Compile Include="DataProviders\TFSTestSuiteDataProvider\TFSReportItemsProvider.cs" />
     <Compile Include="DocXCreation\DefaultTemplateLoader.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilderFactory.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\BlockBuilder.cs" />
@@ -294,7 +295,7 @@
     <Compile Include="DocXCreation\IDocXBuilderFactory.cs" />
     <Compile Include="UIComponents\ImageHelper.cs" />
     <Compile Include="UIComponents\DXComponents\MessageBox\IMessageBoxProvider.cs" />
-    <Compile Include="DataProviders\ITestSuiteForReportProvider.cs" />
+    <Compile Include="DataProviders\ISimpleTestSuiteDataProvider.cs" />
     <Compile Include="UIComponents\DXComponents\MessageBox\FlyoutMessageBoxProvider.cs" />
     <Compile Include="Model\TestSuiteForReport.cs" />
     <Compile Include="NativeAPI\NativeAPI.cs" />

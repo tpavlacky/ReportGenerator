@@ -27,7 +27,7 @@ namespace ReportGenerator
 		private readonly IDocXBuilderFactory _docXBuilderFactory = new DocXBuilderFactory();
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new DummyTestSuiteForReportProvider();
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new TFSPlanTestSuiteProvider();
-		private readonly ITestPlanForReportProvider _testPlanProvider = new DummyHierarchyForReportProvider();
+		private readonly IReportItemsProvider _testPlanProvider = new DummyHierarchyForReportProvider();
 		private readonly IMessageBoxProvider _messageBoxProvider = new FlyoutMessageBoxProvider();
 		private readonly CancelableProgressOverlayFormManager _overlayFormManager = new CancelableProgressOverlayFormManager();
 		private readonly ISettingsHandler _settingsHandler = new SettingsHandler();
