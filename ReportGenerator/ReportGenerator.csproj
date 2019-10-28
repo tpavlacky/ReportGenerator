@@ -241,10 +241,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\DummyConnectionProvider.cs" />
     <Compile Include="DataProviders\Dummy\Hierarchy\DummyHierarchyForReportProvider.cs" />
     <Compile Include="DataProviders\IReportItemsProvider.cs" />
-    <Compile Include="DataProviders\TFSTestSuiteDataProvider\TFSReportItemsProvider.cs" />
+    <Compile Include="DataProviders\IUriFactoryProvider.cs" />
+    <Compile Include="DataProviders\TFS\TFSTestSuiteDataProvider\TFSReportItemsProvider.cs" />
+    <Compile Include="DataProviders\TFS\TFSUriFactoryProvider.cs" />
     <Compile Include="DocXCreation\DefaultTemplateLoader.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilderFactory.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\BlockBuilder.cs" />
@@ -253,10 +254,13 @@
     <Compile Include="DocXCreation\XCeed.DocX\BlockBuilders\XCeedTestSuiteBlockBuilder.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\IBlockBuilderFactory.cs" />
     <Compile Include="DocXCreation\XCeed.DocX\XCeedDocXBuilder.cs" />
+    <Compile Include="DataProviders\IConnectionSettingsProvider.cs" />
+    <Compile Include="DataProviders\IUriFactory.cs" />
+    <Compile Include="DataProviders\TFS\TFSItemUriFactory.cs" />
+    <Compile Include="DataProviders\ITeamProjectLoader.cs" />
     <Compile Include="Settings\IAppSettings.cs" />
     <Compile Include="Settings\IConnectionSettings.cs" />
     <Compile Include="Settings\ISettingsHandler.cs" />
-    <Compile Include="Connection\IConnectionProvider.cs" />
     <Compile Include="Model\IProjectSettings.cs" />
     <Compile Include="Model\IReportItem.cs" />
     <Compile Include="Model\ReportItem.cs" />
@@ -264,9 +268,10 @@
     <Compile Include="Model\TestPlan.cs" />
     <Compile Include="Model\TestSuite.cs" />
     <Compile Include="Settings\SettingsHandler.cs" />
-    <Compile Include="Connection\TFSConnectionProvider.cs" />
     <Compile Include="Settings\TemplateSettings.cs" />
     <Compile Include="Settings\TFSSettings.cs" />
+    <Compile Include="DataProviders\TFS\TFSConnectionSettingsProvider.cs" />
+    <Compile Include="DataProviders\TFS\TFSTeamProjectLoader.cs" />
     <Compile Include="UIComponents\DXComponents\BarItemExtender\BarItemExtender.cs">
       <SubType>Component</SubType>
     </Compile>

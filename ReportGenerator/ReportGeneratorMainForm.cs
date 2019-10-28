@@ -16,9 +16,8 @@ using System.Drawing;
 using DevExpress.XtraTreeList.Menu;
 using DevExpress.Utils.Menu;
 using Microsoft.TeamFoundation.Client;
-using Microsoft.VisualStudio.Services.Client;
-using Microsoft.VisualStudio.Services.Common;
-using System.Linq;
+using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.DataProviders.TFS;
 
 namespace ReportGenerator
 {
@@ -28,10 +27,12 @@ namespace ReportGenerator
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new DummyTestSuiteForReportProvider();
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new TFSPlanTestSuiteProvider();
 		private readonly IReportItemsProvider _testPlanProvider = new DummyHierarchyForReportProvider();
+		private readonly ITeamProjectLoader _teamProjectLoader;
 		private readonly IMessageBoxProvider _messageBoxProvider = new FlyoutMessageBoxProvider();
 		private readonly CancelableProgressOverlayFormManager _overlayFormManager = new CancelableProgressOverlayFormManager();
 		private readonly ISettingsHandler _settingsHandler = new SettingsHandler();
-		private readonly IConnectionProvider _tfsConnectionProvider = new DummyConnectionProvider();
+		private readonly IConnectionSettingsProvider _connectionSettingsProvider = new TFSConnectionSettingsProvider();
+		private readonly IUriFactoryProvider _uriFactoryProvider = new TFSUriFactoryProvider();
 
 		private IList<IReportItem> _testPlanForReport;
 
@@ -43,6 +44,7 @@ namespace ReportGenerator
 			InitializeComponent();
 			InitAppSettings();
 			ResetTestConnectionIcon();
+			_teamProjectLoader = new DummyTeamProjectLoader();//new TFSTeamProjectLoader(new Progress<string>(SetOverlayLabel));
 		}
 
 		private async void InitAppSettings()
@@ -249,7 +251,7 @@ namespace ReportGenerator
 				return null;
 			}
 
-			return _testPlanProvider.GetData(testSuiteID, cancellationToken, progress);
+			return _testPlanProvider.GetData(GetTeamProject(), _uriFactoryProvider.GetFactory(GetConnectionSettings()), testSuiteID, cancellationToken, progress);
 		}
 
 		private IList<IReportItem> GetDataSourceForReport(CancellationToken cancellationToken, IProgress<string> progress)
@@ -368,7 +370,7 @@ namespace ReportGenerator
 			}
 		}
 
-		private void TreeList_PopupMenuShowing(object sender, DevExpress.XtraTreeList.PopupMenuShowingEventArgs e)
+		private void TreeList_PopupMenuShowing(object sender, PopupMenuShowingEventArgs e)
 		{
 			if (e.Menu is TreeListNodeMenu)
 			{
@@ -427,14 +429,26 @@ namespace ReportGenerator
 		{
 			try
 			{
-				return await Task.Run(() => _tfsConnectionProvider.Test(new TFSSettings(new Uri((string)beTFSAddress.EditValue), (string)beProjectName.EditValue)));
+				return await Task.Run(() => 
+				{
+					return GetTeamProject() != null;
+				});
 			}
 			catch (Exception)
 			{
 				ResetTestConnectionIcon();
 				return false;
-				//_messageBoxProvider.ShowErrorMessage(this, "Invalid uri format.", "Uri error");
 			}
+		}
+
+		private ITestManagementTeamProject GetTeamProject()
+		{
+			return _teamProjectLoader.Load(GetConnectionSettings());
+		}
+
+		private IConnectionSettings GetConnectionSettings()
+		{
+			return _connectionSettingsProvider.Get(beTFSAddress.EditValue?.ToString(), beProjectName.EditValue?.ToString());
 		}
 
 		private async void TestConnectionRepItem_Click(object sender, EventArgs e)

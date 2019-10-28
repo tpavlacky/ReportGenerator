@@ -11,7 +11,7 @@ namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 	{
 		private Random _random = new Random();
 
-		public IList<IReportItem> GetData(uint testSuiteID, CancellationToken cancellationToken, IProgress<string> progress)
+		public IList<IReportItem> GetData(ITestManagementTeamProject teamProject, IUriFactory uriFactory, uint testSuiteID, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			return new List<IReportItem>{new TestPlan(0, 0, "Regression dummy test plan", new List<IReportItem>
 			{
@@ -86,7 +86,7 @@ namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 
 		private TestCase CreateTestCase(int id, int parentID)
 		{
-			return new TestCase(id, parentID, $"Caption for TC {id}", GetRandomTestSummary(), GetRandomTestOutcome(), "Tested by someone", DateTime.Now, new List<IReportItem>(0), new Uri("http://www.idnes.cz"), "Win 10-64 bit", TimeSpan.FromSeconds(_random.Next(0, 50)), 10, 20);
+			return new TestCase(id, parentID, $"Caption for TC {id}", GetRandomTestSummary(), GetRandomTestOutcome(), "Tested by someone", DateTime.Now, new List<IReportItem>(0), new Uri("http://www.idnes.cz"), "Win 10-64 bit", TimeSpan.FromSeconds(_random.Next(0, 50)));
 		}
 
 		private TestOutcome GetRandomTestOutcome()
@@ -114,5 +114,13 @@ namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 			@"Schlecht mu la neunzehn lauschte ab. Schien keinem drehte teller sah eia hin minute. Man wei ins heruber leuchte dus hochmut. Flusterton du unsicherer da ab ungerechte ob wasserkrug. Gewesen fischen bi im wachter in gewerbe. Fu vorpfeifen sa wu halboffene sonderling. ",
 			@"Ab augenblick freundlich dazwischen he da in aufmerksam ordentlich. Zehn die tage wie ten frau sehe dies. Tief sind ri in zehn berg. Gelandes arbeiter im brotlose allerlei ab wirklich horchend so ri. Stickig ja schlief pa spiegel geschah es melodie. Offenen geruckt madchen braunen hol glatten auf mir. Dachkammer pa aneinander da ungerechte ja nachmittag achthausen kuchenture. Las daran genie ort das komme zwirn der blies. Dies auch dank ein gern das eile land. Nur dazwischen kindlichen see lehrlingen. ",
 		};
+	}
+
+	internal class DummyTeamProjectLoader : ITeamProjectLoader
+	{
+		public ITestManagementTeamProject Load(IConnectionSettings connectionSettings)
+		{
+			return null;
+		}
 	}
 }
