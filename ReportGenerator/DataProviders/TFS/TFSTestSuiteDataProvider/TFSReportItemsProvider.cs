@@ -1,4 +1,5 @@
 ﻿using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.Extenders;
 using ReportGenerator.Model;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 				return testPlan;
 			}
 
-			ReportProgress(progress, $"Loading test plan {rootTestPlan.Id}");
+			ReportProgress(progress, $"Loading test plan {rootTestPlan.Id} ...");
 			InitializeTestSuite(teamProject, uriFactory, rootSuite, testPlan, cancellationToken, progress);
 			return testPlan;
 
@@ -59,7 +60,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 		private IReportItem LoadTestSuite(ITestManagementTeamProject teamProject, IUriFactory uriFactory, IStaticTestSuite rootTestSuite, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			var testSuite = new TestSuite(rootTestSuite.Id, 0, rootTestSuite.Title, uriFactory.GetTestSuiteUri(rootTestSuite.Id, rootTestSuite.Plan?.Id));
-			ReportProgress(progress, $"Loading test suite {rootTestSuite.Id}");
+			ReportProgress(progress, $"Loading test suite {rootTestSuite.Id} ...");
 			InitializeTestSuite(teamProject, uriFactory, rootTestSuite, testSuite, cancellationToken, progress);
 
 			return testSuite;
@@ -71,7 +72,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 
 			foreach (var staticTestSuite in parentStaticTestSuite.SubSuites.OfType<IStaticTestSuite>().OrderBy(suite => suite.Title))
 			{
-				ReportProgress(progress, $"Loading test suite {staticTestSuite.Id}");
+				ReportProgress(progress, $"Loading test suite {staticTestSuite.Id} ...");
 				cancellationToken.ThrowIfCancellationRequested();
 				var reportTestSuite = new TestSuite(staticTestSuite.Id, parentStaticTestSuite.Id, staticTestSuite.Title, uriFactory.GetTestSuiteUri(staticTestSuite.Id, staticTestSuite.Plan?.Id));
 				parentReportItem.Children.Add(reportTestSuite);
@@ -88,7 +89,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 			foreach (var testEntry in testCases)
 			{
 				actualTestCase++;
-				ReportProgress(progress, $"Loading test cases for test suite {staticParentTestSUite.Id} ... {actualTestCase}/{testCasesCount}");
+				ReportProgress(progress, $"Loading test cases for test suite {staticParentTestSUite.Id} ({actualTestCase}/{testCasesCount})");
 				cancellationToken.ThrowIfCancellationRequested();
 				var testResult = teamProject.TestResults.ByTestId(testEntry.Id).OrderByDescending(c => c.DateCreated).FirstOrDefault();
 				if(testResult == null)
@@ -107,11 +108,12 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 							testEntry.Id,
 							staticParentTestSUite.Id,
 							testEntry.Title,
-							testEntry.TestCase?.Description,
+							testEntry.TestCase?.Description.HtmlToPlainText(),
 							testResult.Outcome,
 							testResult.RunByName,
 							testResult.DateCompleted,
-							uriFactory.GetTestRunUri(testResult.TestResultId, testResult.TestResultId),
+							uriFactory.GetTestCaseUri(testEntry.Id),
+							uriFactory.GetTestRunUri(testResult.TestRunId, testResult.TestResultId),
 							testResult.TestConfigurationName,
 							testResult.Duration));
 				}

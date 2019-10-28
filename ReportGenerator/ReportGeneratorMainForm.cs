@@ -42,9 +42,9 @@ namespace ReportGenerator
 		public ReportGeneratorMainForm()
 		{
 			InitializeComponent();
+			_teamProjectLoader = new DummyTeamProjectLoader();//new TFSTeamProjectLoader(new Progress<string>(SetOverlayLabel));
 			InitAppSettings();
 			ResetTestConnectionIcon();
-			_teamProjectLoader = new DummyTeamProjectLoader();//new TFSTeamProjectLoader(new Progress<string>(SetOverlayLabel));
 		}
 
 		private async void InitAppSettings()
@@ -149,10 +149,10 @@ namespace ReportGenerator
 			try
 			{
 				var template = GetTemplateFileInfo();
-				if(template == null)
-				{
-					_messageBoxProvider.ShowInformation(this, "Template was not defined by user. Default template will be used.", "Custom template not defined");
-				}
+				//if(template == null)
+				//{
+				//	_messageBoxProvider.ShowInformation(this, "Template was not defined by user. Default template will be used.", "Custom template not defined");
+				//}
 				overlayHandle = _overlayFormManager.ShowOverlayForm(this, OnCancelButtonClick);
 				SetOverlayLabel("Loading data ...");
 				var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.DocX));

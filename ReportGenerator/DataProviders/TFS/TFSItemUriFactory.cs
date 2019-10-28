@@ -18,7 +18,8 @@ namespace ReportGenerator
 
 		public Uri GetTestSuiteUri(int testSuiteID, int? testPlanID)
 		{
-			return new Uri($"{_connectionSettings.Uri}{_connectionSettings.ProjectName}/_testManagement?suiteId={testSuiteID}" + testPlanID == null ? string.Empty : $"&planId={testPlanID}");
+			var testPlanPart = testPlanID == null ? string.Empty : $"&planId={testPlanID}";
+			return new Uri($"{_connectionSettings.Uri}{_connectionSettings.ProjectName}/_testManagement?suiteId={testSuiteID}" + testPlanPart);
 		}
 
 		public Uri GetTestCaseUri(int testCaseID)

@@ -9,7 +9,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 	{
 		protected readonly Document _document;
 
-		public abstract void Build(IReportItem reportItem, uint level, CancellationToken cancellationToken, IProgress<string> progress);
+		public abstract void Build(IReportItem reportItem, int level, CancellationToken cancellationToken, IProgress<string> progress);
 
 		public BlockBuilder(Document document)
 		{

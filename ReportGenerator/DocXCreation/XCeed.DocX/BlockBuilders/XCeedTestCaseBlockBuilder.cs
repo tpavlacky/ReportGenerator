@@ -19,7 +19,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 		{
 		}
 
-		public override void Build(IReportItem reportItem, uint level, CancellationToken cancellationToken, IProgress<string> progress)
+		public override void Build(IReportItem reportItem, int level, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			if (!(reportItem is TestCase testCase))
 			{
@@ -84,24 +84,24 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 				var tableDescriptor = tableDescriptors[i];
 				var header = table.Rows[0].Cells[i].Paragraphs
 					.First()
-					.Append(tableDescriptor.Caption)
+					.Append(tableDescriptor.ColumnCaption)
 					.KeepLinesTogether()
 					.KeepWithNextParagraph();
 				var contentCell = table.Rows[1].Cells[i].Paragraphs.First();
 
-				if (tableDescriptor.CellTextType == OutcomeCellTextType.Text)
+				if (tableDescriptor is OutcomeTableDescriptor)
 				{
-					contentCell.Append(tableDescriptor.Text);
+					contentCell.Append(tableDescriptor.OutcomeRowText);
 					contentCell.StyleName = outcomeContentTableStyle;
 				}
-				else if (tableDescriptor.CellTextType == OutcomeCellTextType.Hyperlink)
+				else if (tableDescriptor is OutcomeTableHyperLinkDescriptor hyperLinkDescriptor)
 				{
-					var hyperLink = CreateHyperLink(testCase.TestOutcome.ToString(), testCase.URI);
+					var hyperLink = CreateHyperLink(hyperLinkDescriptor.OutcomeRowText, hyperLinkDescriptor.Uri);
 					contentCell.AppendHyperlink(hyperLink);
 				}
 				else
 				{
-					contentCell.Append(tableDescriptor.Text);
+					contentCell.Append(tableDescriptor.OutcomeRowText);
 				}
 			}
 			_document.InsertTable(table);
@@ -118,7 +118,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 		{
 			return new List<OutcomeTableDescriptor>
 			{
-				new OutcomeTableDescriptor("Outcome", testCase.TestOutcome.ToString(), OutcomeCellTextType.Hyperlink),
+				new OutcomeTableHyperLinkDescriptor("Outcome", testCase.TestOutcome.ToString(), testCase.TestRunResultUri),
 				new OutcomeTableDescriptor("Configuration", testCase.Configuration),
 				new OutcomeTableDescriptor("Run by", testCase.TestedBy),
 				new OutcomeTableDescriptor("Date completed", testCase.TestedDate?.ToString(OUTCOME_DATETIME_FORMAT)),
@@ -139,17 +139,26 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 			}
 		}
 
+		//TODO -> remove definition for column name from this class and separate creation of header cells from content cells
 		private class OutcomeTableDescriptor
 		{
-			public string Caption { get; }
-			public string Text { get; }
-			public OutcomeCellTextType CellTextType { get; }
+			public string ColumnCaption { get; }
+			public string OutcomeRowText { get; }
 
-			public OutcomeTableDescriptor(string caption, string text, OutcomeCellTextType cellTextType = OutcomeCellTextType.Text)
+			public OutcomeTableDescriptor(string caption, string text)
 			{
-				Caption = caption;
-				Text = text;
-				CellTextType = cellTextType;
+				ColumnCaption = caption;
+				OutcomeRowText = text;
+			}
+		}
+
+		private class OutcomeTableHyperLinkDescriptor : OutcomeTableDescriptor
+		{
+			public Uri Uri { get; }
+
+			public OutcomeTableHyperLinkDescriptor(string caption, string text, Uri uri) : base(caption, text)
+			{
+				Uri = uri;
 			}
 		}
 

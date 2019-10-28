@@ -25,7 +25,8 @@ namespace ReportGenerator.DocXCreation.XCeed
 				{
 					cancellationToken.ThrowIfCancellationRequested();
 					//progress
-					GenerateReportItem(doc, reportItem, 0, cancellationToken, progress);
+					var hierarchyLevel = reportItem is TestPlan ? 0 : 1;
+					GenerateReportItem(doc, reportItem, hierarchyLevel, cancellationToken, progress);
 				}
 				doc.Save();
 			}
@@ -33,7 +34,7 @@ namespace ReportGenerator.DocXCreation.XCeed
 			return new FileInfo(_finalDocumentPath);
 		}
 
-		private void GenerateReportItem(XC.DocX doc, IReportItem reportItem, uint level, CancellationToken cancellationToken, IProgress<string> progress)
+		private void GenerateReportItem(XC.DocX doc, IReportItem reportItem, int level, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			var blockBuilder = _blockBuilderFactory.GetBlockBuilder(doc, reportItem);
 			blockBuilder.Build(reportItem, level, cancellationToken, progress);

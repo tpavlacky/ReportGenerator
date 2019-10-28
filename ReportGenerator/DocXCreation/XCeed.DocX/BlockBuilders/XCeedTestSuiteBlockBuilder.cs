@@ -13,7 +13,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 		{
 		}
 
-		public override void Build(IReportItem reportItem, uint level, CancellationToken cancellationToken, IProgress<string> progress)
+		public override void Build(IReportItem reportItem, int level, CancellationToken cancellationToken, IProgress<string> progress)
 		{
 			//TODO remove and create separate builder if necessary
 			if (reportItem is TestPlan)
@@ -38,7 +38,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 			AppendHorizontalLine();
 		}
 
-		private void AppendTestSuiteHeader(IReportItem reportItem, uint level)
+		private void AppendTestSuiteHeader(IReportItem reportItem, int level)
 		{
 			var par = _document
 				.InsertParagraph("Test suite ")
@@ -63,7 +63,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 			par.KeepWithNextParagraph();
 		}
 
-		private string GetTestSuiteHeaderStyle(uint hierarchyLevel)
+		private string GetTestSuiteHeaderStyle(int hierarchyLevel)
 		{
 			if(hierarchyLevel == 1)
 			{
