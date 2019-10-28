@@ -201,7 +201,8 @@
 			// 
 			this.templateFileRepItem.AutoHeight = false;
 			this.templateFileRepItem.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
+            new DevExpress.XtraEditors.Controls.EditorButton(),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Close)});
 			this.templateFileRepItem.Name = "templateFileRepItem";
 			this.templateFileRepItem.ReadOnly = true;
 			this.templateFileRepItem.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;

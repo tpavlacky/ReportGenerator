@@ -266,15 +266,22 @@ namespace ReportGenerator
 
 		private void TemplatesFolderRepositoryItem_ButtonClick(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
 		{
-			using (var xtraOpenFileDialog = new XtraOpenFileDialog())
+			if (e.Button.Index == 0)
 			{
-				xtraOpenFileDialog.Filter = "Template|*.docx";
-				var result = xtraOpenFileDialog.ShowDialog();
-				if (result == DialogResult.OK)
+				using (var xtraOpenFileDialog = new XtraOpenFileDialog())
 				{
-					var selectedFolder = xtraOpenFileDialog.FileName;
-					beTemplateFile.EditValue = selectedFolder;
+					xtraOpenFileDialog.Filter = "Template|*.docx";
+					var result = xtraOpenFileDialog.ShowDialog();
+					if (result == DialogResult.OK)
+					{
+						var selectedFolder = xtraOpenFileDialog.FileName;
+						beTemplateFile.EditValue = selectedFolder;
+					}
 				}
+			}
+			else if(e.Button.Index == 1)
+			{
+				beTemplateFile.EditValue = null;
 			}
 		}
 
