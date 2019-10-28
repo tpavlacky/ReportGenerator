@@ -567,6 +567,7 @@
 			this.Controls.Add(this.treeList);
 			this.Controls.Add(this.ribbonStatusBar);
 			this.Controls.Add(this.ribbonControl);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "ReportGeneratorMainForm";
 			this.Ribbon = this.ribbonControl;
 			this.StatusBar = this.ribbonStatusBar;
