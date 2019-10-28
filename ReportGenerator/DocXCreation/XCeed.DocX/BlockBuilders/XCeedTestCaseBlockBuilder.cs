@@ -119,10 +119,10 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 			return new List<OutcomeTableDescriptor>
 			{
 				new OutcomeTableHyperLinkDescriptor("Outcome", testCase.TestOutcome.ToString(), testCase.TestRunResultUri),
-				new OutcomeTableDescriptor("Configuration", testCase.Configuration),
-				new OutcomeTableDescriptor("Run by", testCase.TestedBy),
-				new OutcomeTableDescriptor("Date completed", testCase.TestedDate?.ToString(OUTCOME_DATETIME_FORMAT)),
-				new OutcomeTableDescriptor("Duration in seconds", testCase.Duration.ToString())
+				new OutcomeTableTextDescriptor("Configuration", testCase.Configuration),
+				new OutcomeTableTextDescriptor("Run by", testCase.TestedBy),
+				new OutcomeTableTextDescriptor("Date completed", testCase.TestedDate?.ToString(OUTCOME_DATETIME_FORMAT)),
+				new OutcomeTableTextDescriptor("Duration in seconds", testCase.Duration.ToString())
 			};
 		}
 
@@ -140,7 +140,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 		}
 
 		//TODO -> remove definition for column name from this class and separate creation of header cells from content cells
-		private class OutcomeTableDescriptor
+		private abstract class OutcomeTableDescriptor
 		{
 			public string ColumnCaption { get; }
 			public string OutcomeRowText { get; }
@@ -149,6 +149,13 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 			{
 				ColumnCaption = caption;
 				OutcomeRowText = text;
+			}
+		}
+
+		private class OutcomeTableTextDescriptor : OutcomeTableDescriptor
+		{
+			public OutcomeTableTextDescriptor(string caption, string text) : base(caption, text)
+			{
 			}
 		}
 

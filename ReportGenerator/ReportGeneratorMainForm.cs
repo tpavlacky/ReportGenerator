@@ -107,6 +107,7 @@ namespace ReportGenerator
 
 				if (newDataSource == null)
 				{
+					_messageBoxProvider.ShowInformation(this, $"Test plan / test suite with ID {GetTestSuiteID()} was not found", "No data found");
 					return;
 				}
 
