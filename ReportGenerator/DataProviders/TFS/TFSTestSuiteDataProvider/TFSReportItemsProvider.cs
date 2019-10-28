@@ -89,7 +89,7 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 			foreach (var testEntry in testCases)
 			{
 				actualTestCase++;
-				ReportProgress(progress, $"Loading test cases for test suite {staticParentTestSUite.Id} ({actualTestCase}/{testCasesCount})");
+				ReportProgress(progress, $"Loading test cases for test suite {staticParentTestSUite.Id} ({actualTestCase}/{testCasesCount}) ...");
 				cancellationToken.ThrowIfCancellationRequested();
 				var testResult = teamProject.TestResults.ByTestId(testEntry.Id).OrderByDescending(c => c.DateCreated).FirstOrDefault();
 				if(testResult == null)
