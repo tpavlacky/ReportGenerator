@@ -17,7 +17,7 @@ namespace ReportGenerator
 		{
 			var tfsCollection = InitializeTFSCollection(connectionSettings);
 			var testManagementService = tfsCollection.GetService<ITestManagementService>();
-			ReportProgress($"Loading project '{connectionSettings.ProjectName}'");
+			ReportProgress($"Loading project '{connectionSettings.ProjectName}' ...");
 			var teamProject = testManagementService.GetTeamProject(connectionSettings.ProjectName);
 
 			if (teamProject == null)
