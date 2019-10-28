@@ -21,8 +21,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 
 		public override void Build(IReportItem reportItem, uint level, CancellationToken cancellationToken, IProgress<string> progress)
 		{
-			var testCase = reportItem as TestCase;
-			if(testCase == null)
+			if (!(reportItem is TestCase testCase))
 			{
 				//ex
 				return;

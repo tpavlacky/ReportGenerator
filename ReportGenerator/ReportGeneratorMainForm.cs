@@ -31,7 +31,6 @@ namespace ReportGenerator
 		private readonly IMessageBoxProvider _messageBoxProvider = new FlyoutMessageBoxProvider();
 		private readonly CancelableProgressOverlayFormManager _overlayFormManager = new CancelableProgressOverlayFormManager();
 		private readonly ISettingsHandler _settingsHandler = new SettingsHandler();
-		private readonly IFileTemplatesLoader _fileTemplatesLoader = new DocXFileTemplatesLoader();
 		private readonly IConnectionProvider _tfsConnectionProvider = new DummyConnectionProvider();
 
 		private IList<IReportItem> _testPlanForReport;

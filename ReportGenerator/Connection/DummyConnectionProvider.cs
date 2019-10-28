@@ -2,14 +2,6 @@
 
 namespace ReportGenerator
 {
-	internal class TFSConnectionProvider : IConnectionProvider
-	{
-		public bool Test(IConnectionSettings connectionSettings)
-		{
-			return true;
-		}
-	}
-
 	internal class DummyConnectionProvider : IConnectionProvider
 	{
 		public bool Test(IConnectionSettings connectionSettings)

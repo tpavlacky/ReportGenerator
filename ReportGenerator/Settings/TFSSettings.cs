@@ -2,18 +2,6 @@
 
 namespace ReportGenerator
 {
-	internal interface IConnectionProvider
-	{
-		bool Test(IConnectionSettings connectionSettings);
-	}
-
-	internal interface IConnectionSettings
-	{
-		Uri Uri { get; }
-
-		string ProjectName { get; }
-	}
-
 	internal class TFSSettings : IConnectionSettings
 	{
 		public Uri Uri { get; }

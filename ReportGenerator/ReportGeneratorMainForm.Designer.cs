@@ -57,7 +57,6 @@
 			this.repositoryItemHyperLinkEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemHyperLinkEdit();
 			this.repositoryItemPictureEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
 			this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-			this.templateInfoBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.IReportItemBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.treeListNodeTypesImageCollection = new DevExpress.Utils.ImageCollection(this.components);
 			this.colID = new DevExpress.XtraTreeList.Columns.TreeListColumn();
@@ -83,7 +82,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.cbTemplates)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.templateInfoBindingSource)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.IReportItemBindingSource)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.treeListNodeTypesImageCollection)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.repositoryItemHypertextLabel1)).BeginInit();
@@ -391,10 +389,6 @@
 			this.ribbonStatusBar.Ribbon = this.ribbonControl;
 			this.ribbonStatusBar.Size = new System.Drawing.Size(790, 31);
 			// 
-			// templateInfoBindingSource
-			// 
-			this.templateInfoBindingSource.DataSource = typeof(ReportGenerator.TemplateInfo);
-			// 
 			// IReportItemBindingSource
 			// 
 			this.IReportItemBindingSource.DataSource = typeof(ReportGenerator.Model.IReportItem);
@@ -587,7 +581,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.cbTemplates)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.repositoryItemHyperLinkEdit1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.templateInfoBindingSource)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.IReportItemBindingSource)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.treeListNodeTypesImageCollection)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.repositoryItemHypertextLabel1)).EndInit();
@@ -618,7 +611,6 @@
 		private DevExpress.XtraEditors.Repository.RepositoryItemComboBox cbTemplates;
 		private DevExpress.XtraBars.BarEditItem beTemplateFile;
 		private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit templateFileRepItem;
-		private System.Windows.Forms.BindingSource templateInfoBindingSource;
 		private System.Windows.Forms.BindingSource IReportItemBindingSource;
 		private DevExpress.Utils.ImageCollection treeListNodeTypesImageCollection;
 		private DevExpress.XtraTreeList.Columns.TreeListColumn colID;
