@@ -1,12 +1,12 @@
-﻿using Microsoft.TeamFoundation.TestManagement.Client;
-using ReportGenerator.Extenders;
-using ReportGenerator.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.Extenders;
+using ReportGenerator.Model;
 
-namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
+namespace ReportGenerator.DataProviders.TFS.TFSTestSuiteDataProvider
 {
 	internal class TFSReportItemsProvider : IReportItemsProvider
 	{
@@ -99,11 +99,14 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 							testEntry.Id, 
 							staticParentTestSUite.Id, 
 							testEntry.Title,
-							testEntry.TestCase?.Description));
+              testEntry.TestCase?.Description.HtmlToPlainText()));
 				}
 				else
-				{
-					parentReportItem.Children.Add(
+        {
+          var testCaseUri = IsValidTestOutcome(testResult) ? uriFactory.GetTestCaseUri(testEntry.Id) : null;
+          var testRunUri = IsValidTestOutcome(testResult) ? uriFactory.GetTestRunUri(testResult.TestRunId, testResult.TestResultId) : null;
+
+          parentReportItem.Children.Add(
 						new TestCase(
 							testEntry.Id,
 							staticParentTestSUite.Id,
@@ -112,13 +115,18 @@ namespace ReportGenerator.DataProviders.TFSTestSuiteDataProvider
 							testResult.Outcome,
 							testResult.RunByName,
 							testResult.DateCompleted,
-							uriFactory.GetTestCaseUri(testEntry.Id),
-							uriFactory.GetTestRunUri(testResult.TestRunId, testResult.TestResultId),
+              testCaseUri,
+              testRunUri,
 							testResult.TestConfigurationName,
 							testResult.Duration));
 				}
 			}
 		}
+
+    private bool IsValidTestOutcome(ITestCaseResult testCaseResult)
+    {
+      return testCaseResult.Outcome != TestOutcome.NotExecuted;
+    }
 
 		private void ReportProgress(IProgress<string> progress, string message)
 		{

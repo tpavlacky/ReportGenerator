@@ -17,7 +17,13 @@ using DevExpress.XtraTreeList.Menu;
 using DevExpress.Utils.Menu;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.DataProviders;
 using ReportGenerator.DataProviders.TFS;
+using ReportGenerator.DataProviders.TFS.TFSTestSuiteDataProvider;
+using ReportGenerator.DocXCreation;
+using ReportGenerator.Settings;
+using ReportGenerator.UIComponents.DXComponents.MessageBox;
+using ReportGenerator.UIComponents.DXComponents.OverlayForm;
 
 namespace ReportGenerator
 {
@@ -26,7 +32,7 @@ namespace ReportGenerator
 		private readonly IDocXBuilderFactory _docXBuilderFactory = new DocXBuilderFactory();
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new DummyTestSuiteForReportProvider();
 		//private readonly ITestSuiteForReportProvider _testSuiteForReportProvider = new TFSPlanTestSuiteProvider();
-		private readonly IReportItemsProvider _testPlanProvider = new DummyHierarchyForReportProvider();
+		private readonly IReportItemsProvider _testPlanProvider = new TFSReportItemsProvider();
 		private readonly ITeamProjectLoader _teamProjectLoader;
 		private readonly IMessageBoxProvider _messageBoxProvider = new FlyoutMessageBoxProvider();
 		private readonly CancelableProgressOverlayFormManager _overlayFormManager = new CancelableProgressOverlayFormManager();
@@ -42,7 +48,7 @@ namespace ReportGenerator
 		public ReportGeneratorMainForm()
 		{
 			InitializeComponent();
-			_teamProjectLoader = new DummyTeamProjectLoader();//new TFSTeamProjectLoader(new Progress<string>(SetOverlayLabel));
+			_teamProjectLoader = new TFSTeamProjectLoader(new Progress<string>(SetOverlayLabel));
 			InitAppSettings();
 			ResetTestConnectionIcon();
 		}
@@ -103,7 +109,7 @@ namespace ReportGenerator
 				var newDataSource = await Task.Run(() =>
 				{
 					return GetNewDataSource(cancellationToken, new Progress<string>(SetOverlayLabel));
-				});
+				}, cancellationToken);
 
 				if (newDataSource == null)
 				{
@@ -130,12 +136,9 @@ namespace ReportGenerator
 			finally
 			{
 				_overlayFormManager.CloseOverlayForm(overlayHandle);
-				if (tokenSource != null)
-				{
-					tokenSource.Dispose();
-				}
+        tokenSource?.Dispose();
 
-				this.tokenSource = null;
+        this.tokenSource = null;
 			}
 		}
 
@@ -156,11 +159,11 @@ namespace ReportGenerator
 				//}
 				overlayHandle = _overlayFormManager.ShowOverlayForm(this, OnCancelButtonClick);
 				SetOverlayLabel("Loading data ...");
-				var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.DocX));
+				var builder = await Task.Run(() => _docXBuilderFactory.GetDocXBuilder(DocXBuilderType.DocX), cancellationToken);
 
 				SetOverlayLabel("Generating report ...");
 				var progress = new Progress<string>(SetOverlayLabel);
-				document = await Task.Run(() => builder.CreateDocument(template, GetDataSourceForReport(cancellationToken, progress), cancellationToken, progress));
+				document = await Task.Run(() => builder.CreateDocument(template, GetDataSourceForReport(cancellationToken, progress), cancellationToken, progress), cancellationToken);
 			}
 			catch (OperationCanceledException)
 			{
@@ -380,14 +383,14 @@ namespace ReportGenerator
 
 		private void TreeList_PopupMenuShowing(object sender, PopupMenuShowingEventArgs e)
 		{
-			if (e.Menu is TreeListNodeMenu)
-			{
-				treeList.FocusedNode = ((TreeListNodeMenu)e.Menu).Node;
-				e.Menu.Items.Add(new DXMenuItem("Expand all", (sndr, args) => treeList.ExpandAll(), treeListPopUpMenuImageCollection.Images[0]));
-				e.Menu.Items.Add(new DXMenuItem("Collapse all", (sndr, args) => treeList.CollapseAll(), treeListPopUpMenuImageCollection.Images[1]));
-				//open
-				//print
-			}
+			//if (e.Menu is TreeListNodeMenu)
+			//{
+			//	treeList.FocusedNode = ((TreeListNodeMenu)e.Menu).Node;
+			//	e.Menu.Items.Add(new DXMenuItem("Expand all", (sndr, args) => treeList.ExpandAll(), treeListPopUpMenuImageCollection.Images[0]));
+			//	e.Menu.Items.Add(new DXMenuItem("Collapse all", (sndr, args) => treeList.CollapseAll(), treeListPopUpMenuImageCollection.Images[1]));
+			//	//open
+			//	//print
+			//}
 		}
 
 		private void RepItemTFSAddress_EditValueChanged(object sender, EventArgs e)
@@ -475,7 +478,7 @@ namespace ReportGenerator
 				}
 
 				var uri = projectPicker.SelectedTeamProjectCollection.Uri;
-				var project = projectPicker.SelectedProjects[0];
+				var project = projectPicker.SelectedProjects[0]?.Name;
 
 				beTFSAddress.EditValue = uri;
 				beProjectName.EditValue = project;

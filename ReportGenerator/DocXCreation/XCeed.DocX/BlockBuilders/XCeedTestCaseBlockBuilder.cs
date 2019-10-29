@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.DocXCreation.Styles;
 using ReportGenerator.Model;
 using Xceed.Document.NET;
 
@@ -75,7 +77,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 				return;
 			}
 
-			var table = _document.AddTable(OUTCOME_TABLE_ROWS, tableDescriptorsCount);
+      var table = _document.AddTable(OUTCOME_TABLE_ROWS, tableDescriptorsCount);
 			SetTableFormat(table);
 			var outcomeContentTableStyle = GetTestOutcomeFont(testCase.TestOutcome);
 
@@ -89,7 +91,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 					.KeepWithNextParagraph();
 				var contentCell = table.Rows[1].Cells[i].Paragraphs.First();
 
-				if (tableDescriptor is OutcomeTableDescriptor)
+				if (tableDescriptor is OutcomeTableTextDescriptor)
 				{
 					contentCell.Append(tableDescriptor.OutcomeRowText);
 					contentCell.StyleName = outcomeContentTableStyle;
@@ -122,7 +124,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 				new OutcomeTableTextDescriptor("Configuration", testCase.Configuration),
 				new OutcomeTableTextDescriptor("Run by", testCase.TestedBy),
 				new OutcomeTableTextDescriptor("Date completed", testCase.TestedDate?.ToString(OUTCOME_DATETIME_FORMAT)),
-				new OutcomeTableTextDescriptor("Duration in seconds", testCase.Duration.ToString())
+				new OutcomeTableTextDescriptor("Duration in seconds", testCase.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture))
 			};
 		}
 
