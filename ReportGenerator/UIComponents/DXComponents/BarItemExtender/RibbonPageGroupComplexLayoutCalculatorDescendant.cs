@@ -1,15 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using DevExpress.XtraBars.Ribbon.ViewInfo;
 using System.Drawing;
-using DevExpress.Utils;
 using DevExpress.XtraBars;
-using System.Windows.Forms;
 
-namespace CustomRibbonControl {
-    public class RibbonPageGroupComplexLayoutCalculatorDescendant : RibbonPageGroupComplexLayoutCalculator {
+namespace CustomRibbonControl
+{
+	public class RibbonPageGroupComplexLayoutCalculatorDescendant : RibbonPageGroupComplexLayoutCalculator {
         int offsetY;
         int offsetX;
         List<int> widthList = new List<int>();

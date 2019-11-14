@@ -1,5 +1,4 @@
-﻿using Microsoft.TeamFoundation.TestManagement.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ReportGenerator.Model

@@ -3,7 +3,7 @@ using DevExpress.XtraSplashScreen;
 using System;
 using System.Drawing;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.OverlayForm
 {
     class OverlayImagePainterEx : OverlayImagePainter
     {

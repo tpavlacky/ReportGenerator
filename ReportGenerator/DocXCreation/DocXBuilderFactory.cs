@@ -1,5 +1,4 @@
-﻿using ReportGenerator;
-using ReportGenerator.DocXCreation;
+﻿using ReportGenerator.DocXCreation;
 using ReportGenerator.DocXCreation.XCeed;
 
 namespace ReportGenerator

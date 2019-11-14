@@ -1,4 +1,6 @@
-﻿namespace ReportGenerator.DataProviders.TFS
+﻿using ReportGenerator.Settings;
+
+namespace ReportGenerator.DataProviders.TFS
 {
 	internal class TFSUriFactoryProvider : IUriFactoryProvider
 	{

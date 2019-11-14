@@ -1,7 +1,7 @@
 ﻿using DevExpress.XtraBars;
 using System.Windows.Forms;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.MessageBox
 {
 	public class FlyoutMessageBoxProvider : IMessageBoxProvider
 	{

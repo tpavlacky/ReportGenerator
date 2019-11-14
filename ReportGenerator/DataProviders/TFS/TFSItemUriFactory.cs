@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReportGenerator.Settings;
+using System;
 
 namespace ReportGenerator
 {

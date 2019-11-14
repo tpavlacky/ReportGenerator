@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.MessageBox
 {
 	public interface IMessageBoxProvider
 	{

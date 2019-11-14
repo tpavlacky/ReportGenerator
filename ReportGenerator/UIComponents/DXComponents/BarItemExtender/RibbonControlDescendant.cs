@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraBars.Ribbon.ViewInfo;
-using System.Runtime.InteropServices;
-using System.Drawing;
 
-namespace CustomRibbonControl {
-    public class RibbonControlDescendant : RibbonControl {
+namespace CustomRibbonControl
+{
+	public class RibbonControlDescendant : RibbonControl {
         private BarItemExtender _BarItemExtender;
         RibbonViewInfoDescendant viewInfo;
 

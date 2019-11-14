@@ -1,4 +1,4 @@
-﻿namespace ReportGenerator.DocXCreation
+﻿namespace ReportGenerator.DocXCreation.Styles
 {
 	internal static class FontNames
 	{

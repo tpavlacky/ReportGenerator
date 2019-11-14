@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ReportGenerator
+namespace ReportGenerator.Settings
 {
 	internal interface IConnectionSettings
 	{

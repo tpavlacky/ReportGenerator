@@ -1,4 +1,4 @@
-﻿namespace ReportGenerator
+﻿namespace ReportGenerator.DocXCreation.Styles
 {
   internal static class StyleNames
   {

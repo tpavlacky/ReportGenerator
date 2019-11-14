@@ -4,7 +4,7 @@ using DevExpress.XtraSplashScreen;
 using System.Drawing;
 using DevExpress.Utils.Drawing.Helpers;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.OverlayForm
 {
 	internal class OverlaButtonDrawHelper : OverlayElementDrawHelperBase
 	{
@@ -33,10 +33,7 @@ namespace ReportGenerator
 			{
 				if (imageRect.Contains(mousePos))
 				{
-					if (clickAction != null)
-					{
-						clickAction();
-					}
+					clickAction?.Invoke();
 					return true;
 				}
 			}

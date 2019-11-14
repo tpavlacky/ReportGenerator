@@ -1,9 +1,9 @@
 ﻿using ReportGenerator.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.Settings;
 
 namespace ReportGenerator.DataProviders.Dummy.Hierarchy
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Microsoft.TeamFoundation.TestManagement.Client;
@@ -124,7 +123,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 				new OutcomeTableTextDescriptor("Configuration", testCase.Configuration),
 				new OutcomeTableTextDescriptor("Run by", testCase.TestedBy),
 				new OutcomeTableTextDescriptor("Date completed", testCase.TestedDate?.ToString(OUTCOME_DATETIME_FORMAT)),
-				new OutcomeTableTextDescriptor("Duration in seconds", testCase.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture))
+				//new OutcomeTableTextDescriptor("Duration in seconds", testCase.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture))
 			};
 		}
 

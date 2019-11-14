@@ -3,7 +3,7 @@ using System.Drawing;
 using DevExpress.Utils.Drawing;
 using System.Drawing.Text;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.OverlayForm
 {
 	internal class OverlayLabelDrawHelper : OverlayElementDrawHelperBase
 	{

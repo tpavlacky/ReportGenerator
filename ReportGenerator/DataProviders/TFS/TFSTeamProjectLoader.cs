@@ -1,5 +1,6 @@
 ﻿using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.Settings;
 using System;
 
 namespace ReportGenerator

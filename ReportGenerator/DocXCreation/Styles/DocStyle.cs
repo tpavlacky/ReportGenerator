@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ReportGenerator.DocXCreation
+namespace ReportGenerator.DocXCreation.Styles
 {
 	public abstract class DocStyle : IDocStyle
 	{

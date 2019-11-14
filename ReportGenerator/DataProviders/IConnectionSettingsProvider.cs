@@ -1,4 +1,6 @@
-﻿namespace ReportGenerator
+﻿using ReportGenerator.Settings;
+
+namespace ReportGenerator
 {
 	internal interface IConnectionSettingsProvider
 	{

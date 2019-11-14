@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using DevExpress.XtraBars.Ribbon;
 using DevExpress.XtraBars;
-using DevExpress.XtraBars.Ribbon.ViewInfo;
 
-namespace CustomRibbonControl {
-    [ProvideProperty("Location", typeof(BarItem))]
+namespace CustomRibbonControl
+{
+	[ProvideProperty("Location", typeof(BarItem))]
     public class BarItemExtender : Component, IExtenderProvider {
         Dictionary<BarItem, Point> controlsDictionary = new Dictionary<BarItem, Point>();
         public event EventHandler LocationChanged;

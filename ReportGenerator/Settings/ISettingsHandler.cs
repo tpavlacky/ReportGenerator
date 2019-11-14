@@ -1,4 +1,4 @@
-﻿namespace ReportGenerator
+﻿namespace ReportGenerator.Settings
 {
 	internal interface ISettingsHandler
 	{

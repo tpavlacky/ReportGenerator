@@ -1,6 +1,6 @@
 ﻿using DevExpress.XtraSplashScreen;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.OverlayForm
 {
 	internal abstract class OverlayElementDrawHelperBase : OverlayWindowPainterBase
 	{

@@ -1,4 +1,4 @@
-﻿namespace ReportGenerator
+﻿namespace ReportGenerator.Settings
 {
 	internal struct TemplateSettings : IAppSettings
 	{

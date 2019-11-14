@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using ReportGenerator.DocXCreation.Styles;
 using Spire.Doc;
 using Spire.Doc.Documents;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.TeamFoundation.TestManagement.Client;
+using ReportGenerator.DocXCreation.Styles;
 using ReportGenerator.Extenders;
 using Spire.Doc;
 using Spire.Doc.Documents;

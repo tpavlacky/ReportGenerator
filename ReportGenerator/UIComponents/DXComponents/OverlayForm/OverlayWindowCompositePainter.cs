@@ -1,9 +1,8 @@
-﻿using DevExpress.XtraSplashScreen;
-using ReportGenerator.Properties;
+﻿using ReportGenerator.Properties;
 using System;
 using System.Drawing;
 
-namespace ReportGenerator
+namespace ReportGenerator.UIComponents.DXComponents.OverlayForm
 {
 	internal class CancelableOverlayWindowCompositePainter
 	{
