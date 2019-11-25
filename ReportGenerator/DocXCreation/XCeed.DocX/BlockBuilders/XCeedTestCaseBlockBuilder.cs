@@ -120,7 +120,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 			return new List<OutcomeTableDescriptor>
 			{
 				new OutcomeTableHyperLinkDescriptor("Outcome", testCase.TestOutcome.ToString(), testCase.TestRunResultUri),
-				new OutcomeTableTextDescriptor("Configuration", testCase.Configuration),
+				//new OutcomeTableTextDescriptor("Configuration", testCase.Configuration),
 				new OutcomeTableTextDescriptor("Run by", testCase.TestedBy),
 				new OutcomeTableTextDescriptor("Date completed", testCase.TestedDate?.ToString(OUTCOME_DATETIME_FORMAT)),
 				//new OutcomeTableTextDescriptor("Duration in seconds", testCase.Duration.TotalSeconds.ToString(CultureInfo.InvariantCulture))
