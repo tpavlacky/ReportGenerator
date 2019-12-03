@@ -18,7 +18,7 @@ namespace ReportGenerator.DocXCreation.XCeed.DocX.BlockBuilders
 
 		protected Hyperlink CreateHyperLink(string text, Uri uri)
 		{
-			return _document.AddHyperlink(text, uri?.AbsoluteUri);
+			return _document.AddHyperlink(text, uri);
 		}
 	}
 }
